@@ -4,12 +4,19 @@ __pycache__/
 
 # 虚拟环境 / 本地配置
 .venv/
+.venv-*/
+.venv*/
 venv/
 .env
 
 # 真实数据与算法产出（均位于项目根 data/，本仓库之外；此处再兜底防误提交）
 *.dat
 data/processed/
+metastore_db/
+spark-warehouse/
+derby.log
+{{HOMEBREW_PREFIX}}/
+{{pkgetc}}/
 
 # 编辑器
 .idea/
