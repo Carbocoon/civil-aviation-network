@@ -1,0 +1,21 @@
+﻿iata_code,airport_name,country,design_capacity_pax,basis,source
+PKX,北京大兴,China,72000000,本期建成保障能力(2019投运),"中国民航网/中新网2025公报:本期保障7200万,远期规划1亿+"
+TFU,成都天府,China,60000000,一期设计年吞吐能力,"中国日报/民航局:一期设计6000万,二期规划1.15亿"
+CAN,广州白云,China,120000000,三期扩建近期(2025投运),"深圳政府网:近期1.2亿,终端1.4亿"
+PVG,上海浦东,China,120000000,扩容规划近期,"南方+:远期1.2-1.4亿(取近期值)"
+PEK,北京首都,China,100000000,设计容量(2019实际已破亿),"南方+:2018/2019连续两年破亿"
+SZX,深圳宝安,China,80000000,三跑道+改扩建后承载(远期9800万),"深圳政府网:T2后承载8000万,远期9800万"
+KMG,昆明长水,China,95000000,T2改扩建总容量(2030目标),"人民网云南:总容量9500万"
+XIY,西安咸阳,China,83000000,T5三期扩建后(2030目标),"中国民航网:满足8300万"
+CKG,重庆江北,China,80000000,T3B投用后终端,"中国民航网:满足8000万"
+HGH,杭州萧山,China,50000000,T4设计年吞吐(国内3600+国际1400),"杭州机场官网/萧山区政府:T4设计5000万"
+CTU,成都双流,China,50000000,提质改造后双航站楼满足,"腾讯新闻/民航发展网:满足5000万"
+SHA,上海虹桥,China,40000000,估算(虹桥T1+T2设计能力),"公开资料估算[建议核实]"
+ATL,Hartsfield-Jackson Atlanta,United States,125500000,2024年座位运力(OAG),aviationa2z / OAG 2024
+DXB,Dubai International,United Arab Emirates,120300000,2024年座位运力(OAG),aviationa2z / OAG 2024
+HND,Tokyo Haneda,Japan,110300000,2024年座位运力(OAG),aviationa2z / OAG 2024
+LHR,London Heathrow,United Kingdom,103200000,2024年座位运力(OAG),aviationa2z / OAG 2024
+DFW,Dallas/Fort Worth,United States,102900000,2024年座位运力(OAG),aviationa2z / OAG 2024
+DEN,Denver International,United States,98400000,2024年座位运力(OAG),aviationa2z / OAG 2024
+IST,Istanbul Airport,Türkiye,96600000,2024年座位运力(OAG),aviationa2z / OAG 2024
+ORD,Chicago O'Hare,United States,94000000,2024年座位运力(OAG),aviationa2z / OAG 2024
