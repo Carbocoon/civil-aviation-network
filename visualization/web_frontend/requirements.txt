@@ -1,0 +1,6 @@
+# 可视化前端（自研 Streamlit 看板）依赖
+streamlit>=1.36
+pandas>=2.0
+plotly>=5.20
+networkx>=3.0
+openpyxl>=3.0
