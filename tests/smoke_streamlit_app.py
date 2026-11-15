@@ -82,6 +82,14 @@ def switch_layout(a, value):
     return a.run()
 
 
+def switch_sort(a, value):
+    """切换中心性排行的排序指标，覆盖排序项与固定列同名的情况。"""
+    for s in a.selectbox:
+        if "排序指标" in str(getattr(s, "label", "")):
+            return s.set_value(value).run()
+    return a.run()
+
+
 if admin is not None:
     for name, fn in [
         ("切换地理布局", lambda a: switch_layout(a, "geo")),
@@ -94,6 +102,13 @@ if admin is not None:
         ("新增订阅", lambda a: [b for b in a.button if "新增订阅" in str(getattr(b, "label", ""))][0].click().run()),
     ]:
         scenario(name, lambda a=admin, f=fn: f(a))
+
+    # 排序项与表格固定列同名时会撞列名，每个取值用独立实例跑一遍
+    for key, label in [("real_throughput_2023", "2023 年吞吐量"),
+                       ("utilization", "容量利用率"),
+                       ("design_capacity", "设计容量"),
+                       ("coupling", "综合耦合权重")]:
+        scenario("排序=" + label, lambda k=key: switch_sort(logged_in(), k))
 
 print("\n=== 应用异常总数: %d / 框架跳过场景: %d ===" % (len(all_err), len(skipped)))
 if all_err:

@@ -334,9 +334,21 @@ def label(key):
 
 
 def zh(df):
-    """返回把英文列名换成中文的副本（数据本身不动）。"""
+    """返回把英文列名换成中文的副本（数据本身不动）。
+
+    不同英文键可能映射到同一中文名（如 real_throughput_2023 / throughput_2023），
+    列名重复会让 Streamlit 的 pyarrow 序列化直接报错，这里给重名项加序号兜底。
+    """
     try:
-        return df.rename(columns={k: v for k, v in COLS.items() if k in df.columns})
+        out = df.rename(columns={k: v for k, v in COLS.items() if k in df.columns})
+        if not out.columns.is_unique:
+            seen, names = {}, []
+            for c in out.columns:
+                n = seen.get(c, 0) + 1
+                seen[c] = n
+                names.append(c if n == 1 else "%s (%d)" % (c, n))
+            out.columns = names
+        return out
     except Exception:
         return df
 

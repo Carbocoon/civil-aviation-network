@@ -306,8 +306,12 @@ with tab_rank:
                               x_title=METRIC_LABELS[sort_col]),
                     **ui.STRETCH)
     st.caption(f"共 {total} 条记录，第 {page}/{pages} 页；排序指标 {METRIC_LABELS[sort_col]}。")
-    st.dataframe(ui.zh(shown[["iata", "name", "city", "country", sort_col, "utilization",
-                              "real_throughput_2023", "design_capacity"]]),
+    # 排序指标本身可能就是后面的固定列之一（2023 年吞吐量 / 容量利用率 / 设计容量），
+    # 直接拼接会产生同名列，pyarrow 序列化时抛 Duplicate column names，故按首次出现去重。
+    rank_cols = list(dict.fromkeys(
+        ["iata", "name", "city", "country", sort_col, "utilization",
+         "real_throughput_2023", "design_capacity"]))
+    st.dataframe(ui.zh(shown[rank_cols]),
                  **ui.STRETCH, hide_index=True,
                  column_config={"容量利用率": st.column_config.ProgressColumn(
                      "容量利用率", min_value=0, max_value=1.2, format="%.3f")})
@@ -614,5 +618,5 @@ with tab_export:
             "<code>data/processed</code>。切换到 Hive 数据源后输出目录不变。")
 
 st.divider()
-st.caption("基于 Hive 的民航航线网络结构分析系统 · "
+st.caption("民航航线网络结构分析系统 · "
            "数据源：OpenFlights + 2023 年真实旅客吞吐量 / 设计容量公开数据")
