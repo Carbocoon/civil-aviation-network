@@ -252,13 +252,14 @@ def network_chart(nodes_df, edges_df, size_col="coupling", color_col="utilizatio
     return chart, nodes
 
 
-def bar_chart(df, value_col, label_col, title, height=460, color=BRAND):
+def bar_chart(df, value_col, label_col, title, height=460, color=BRAND, x_title=None):
     d = df.copy()
     d[value_col] = _numeric(d[value_col])
     return (alt.Chart(d).mark_bar(cornerRadiusEnd=3, color=color).encode(
-        x=alt.X(f"{value_col}:Q", title=value_col,
+        x=alt.X(f"{value_col}:Q", title=x_title or value_col,
                 axis=alt.Axis(gridColor=GRID)),
-        y=alt.Y(f"{label_col}:N", title=None, sort="-x"),
+        y=alt.Y(f"{label_col}:N", title=None, sort="-x",
+                axis=alt.Axis(labelLimit=220, labelFontSize=11.5)),
         tooltip=[alt.Tooltip(f"{label_col}:N", title="机场"),
                  alt.Tooltip(f"{value_col}:Q", title=title, format=".5f"),
                  alt.Tooltip("iata:N", title="三字码"),

@@ -97,38 +97,42 @@ IS_ADMIN = AUTH["role"] == "admin"
 
 # ---------------------------------------------------------------- 侧边栏
 with st.sidebar:
-    st.markdown('<div class="side-brand">✈ 航线网络分析</div>'
+    st.markdown('<div class="side-brand"><i>✈</i>航线网络分析</div>'
                 '<div class="side-sub">Civil Aviation Network Analytics</div>',
                 unsafe_allow_html=True)
-    st.write(f"当前用户：**{AUTH['name']}**")
-    st.caption(f"账号 {AUTH['account']} · 角色 {'管理员（可配置权重）' if IS_ADMIN else '分析师（只读）'}")
+    st.markdown(
+        f'<div class="side-who"><b>{AUTH["name"]}</b>'
+        f'<span>账号 {AUTH["account"]} · '
+        f'{"管理员（可配置权重）" if IS_ADMIN else "分析师（只读）"}</span></div>',
+        unsafe_allow_html=True)
     if st.button("退出登录", **ui.STRETCH):
         st.session_state["auth"] = None
         st.rerun()
-    st.divider()
-    st.markdown("**区域筛选** · 需求 10")
+
+    ui.side_head("数据范围")
     label = st.radio("区域子图", ["global", "china"],
                      format_func=lambda x: "全球网络" if x == "global" else "中国（含港澳台）",
                      label_visibility="collapsed")
-    top_n = st.slider("拓扑图展示节点数（按耦合权重取 Top）", 30, 200, 90, step=10)
-    st.markdown("**拓扑图布局**")
+
+    ui.side_head("视图控制 · 拓扑图")
+    top_n = st.slider("展示节点数（按耦合权重取 Top）", 30, 200, 90, step=10)
     layout_mode = st.selectbox(
         "摆点方式", ["auto", "geo", "spring"],
         format_func=lambda x: {"auto": "自动（优先真实经纬度）",
                                "geo": "真实经纬度（地理分布）",
                                "spring": "力导向（按连线聚簇）"}[x],
         label_visibility="collapsed")
-    edge_limit = st.slider("拓扑图最多画几条航段", 50, 400, 150, step=25)
+    edge_limit = st.slider("最多画几条航段", 50, 400, 150, step=25)
     focus_only = st.checkbox("只看所选机场的相邻机场", value=False,
                              help="把「网络拓扑」页切换成以选中机场为中心的局部视图")
-    st.divider()
-    st.markdown("**算法口径（已冻结）**")
-    st.caption(f"耦合权重 = α×利用率 + β×中心性，α={ALPHA_DEFAULT}、β={BETA_DEFAULT}")
-    st.caption(f"预警阈值：τ1={TAU1}（一级）、τ2={TAU2}（二级）")
-    st.caption("介数抽样 k=800（仅全局大图）")
-    st.divider()
-    st.caption("数据源：算法输出的 data/processed/ 结果文件；"
-               "容量饱和预警为正式功能，高吞吐量预警仅为辅助参考。")
+
+    ui.side_head("口径说明")
+    with st.expander("算法参数（已冻结）", expanded=False):
+        st.caption(f"耦合权重 = α×利用率 + β×中心性，α={ALPHA_DEFAULT}、β={BETA_DEFAULT}")
+        st.caption(f"预警阈值：τ1={TAU1}（一级）、τ2={TAU2}（二级）")
+        st.caption("介数抽样 k=800（仅全局大图）")
+        st.caption("容量饱和预警为正式功能，高吞吐量预警仅为辅助参考。")
+    st.caption("数据源：算法输出的 data/processed/ 结果文件")
 
 
 # ---------------------------------------------------------------- 数据
@@ -161,12 +165,12 @@ for df in (airport_df, edge_df, edge_iata, sat_df, tp_df):
         if c in df.columns:
             df[c] = pd.to_numeric(df[c], errors="coerce")
 
-ui.hero(
+ui.header(
     "民航航线网络结构分析系统 · 可视化看板",
-    "展示层直接消费算法产出的结果表，不实现算法逻辑。容量饱和预警按"
-    "「2023 真实吞吐量 ÷ 真实设计容量」判定；高吞吐量预警仅衡量繁忙度，不作为饱和度结论。",
-    ["区域：" + ("全球网络" if label == "global" else "中国（含港澳台）"),
-     "数据源：data/processed", f"口径 α={ALPHA_DEFAULT} / β={BETA_DEFAULT}",
+    "展示层只读算法结果，不实现算法逻辑 · 容量饱和按「2023 真实吞吐量 ÷ 真实设计容量」判定",
+    [("区域：" + ("全球网络" if label == "global" else "中国（含港澳台）"), True),
+     "数据源 data/processed",
+     f"口径 α={ALPHA_DEFAULT} / β={BETA_DEFAULT}",
      f"登录：{AUTH['name']}"],
 )
 
@@ -178,8 +182,8 @@ if airport_df.empty:
 ui.kpi_row([
     ("机场节点", f"{len(airport_df):,}", "当前区域图节点数", "blue"),
     ("航段记录", f"{len(edge_df):,}", "有向加权边", "cyan"),
-    ("容量饱和预警", f"{len(sat_df):,}", "正式功能 · 基于真实容量", "red"),
-    ("高吞吐量机场", f"{len(tp_df):,}", "辅助参考 · 繁忙度", "amber"),
+    ("容量饱和预警", f"{len(sat_df):,}", "基于真实设计容量", "red", "正式", "hot"),
+    ("高吞吐量机场", f"{len(tp_df):,}", "仅衡量繁忙度", "amber", "辅助", "warm"),
 ])
 
 def _native(x):
@@ -200,8 +204,8 @@ NAME_BY_ID = {str(r["airport_id"]): _code(r) for _, r in airport_df.iterrows()}
 
 tab_topo, tab_rank, tab_compare, tab_bottleneck, tab_warn, tab_vuln, \
     tab_drill, tab_weight, tab_export = st.tabs([
-        "网络拓扑", "中心性排行", "吞吐-耦合对比", "瓶颈识别", "容量饱和预警",
-        "脆弱性评估", "容量流量下钻", "权重配置", "报表导出",
+        "① 网络拓扑", "② 中心性排行", "③ 吞吐·耦合", "④ 瓶颈识别", "⑤ 容量预警",
+        "⑥ 脆弱性", "⑦ 容量流量下钻", "⑧ 权重配置", "⑨ 报表导出",
     ])
 
 # ---------------------------------------------------------------- 1 网络拓扑
@@ -293,17 +297,19 @@ with tab_rank:
                                      ("iata", "name", "city", "country")).lower(), axis=1)]
     total = len(ranked)
     pages = max(1, (total + page_size - 1) // page_size)
-    page = st.number_input("页码", min_value=1, max_value=pages, value=1, step=1)
+    pcol, _gap = st.columns([0.18, 0.82])
+    page = pcol.number_input("页码", min_value=1, max_value=pages, value=1, step=1)
     shown = ranked.iloc[(page - 1) * page_size: page * page_size]
 
     st.altair_chart(bar_chart(ranked.head(30).assign(iata=ranked.head(30)["iata"].fillna("")),
-                              sort_col, "name", f"Top 30 · {METRIC_LABELS[sort_col]}"),
+                              sort_col, "name", f"Top 30 · {METRIC_LABELS[sort_col]}",
+                              x_title=METRIC_LABELS[sort_col]),
                     **ui.STRETCH)
     st.caption(f"共 {total} 条记录，第 {page}/{pages} 页；排序指标 {METRIC_LABELS[sort_col]}。")
-    st.dataframe(shown[["iata", "name", "city", "country", sort_col, "utilization",
-                        "real_throughput_2023", "design_capacity"]],
+    st.dataframe(ui.zh(shown[["iata", "name", "city", "country", sort_col, "utilization",
+                              "real_throughput_2023", "design_capacity"]]),
                  **ui.STRETCH, hide_index=True,
-                 column_config={"utilization": st.column_config.ProgressColumn(
+                 column_config={"容量利用率": st.column_config.ProgressColumn(
                      "容量利用率", min_value=0, max_value=1.2, format="%.3f")})
 
     ui.section("双列排名对比 · 吞吐量排序 vs 耦合指标排序")
@@ -330,10 +336,10 @@ with tab_rank:
         lambda v: str(int(v)) if pd.notna(v) else "榜外")
     with left:
         st.markdown("**按 2023 年旅客吞吐量**")
-        st.dataframe(tp_top, **ui.STRETCH, hide_index=True)
+        st.dataframe(ui.zh(tp_top), **ui.STRETCH, hide_index=True)
     with right:
         st.markdown("**按综合耦合权重**")
-        st.dataframe(cp_top, **ui.STRETCH, hide_index=True)
+        st.dataframe(ui.zh(cp_top), **ui.STRETCH, hide_index=True)
     st.caption("「名次差异」列标出同一机场在两种口径下的排名变化，用于对比"
                "「按吞吐量排序」与「结构+容量耦合」视角的结论差别。")
 
@@ -344,11 +350,11 @@ with tab_compare:
     cmp_df = cmp_df[cmp_df["real_throughput_2023"] > 0]
     if not cmp_df.empty:
         st.altair_chart(scatter_chart(cmp_df), **ui.STRETCH)
-        st.dataframe(cmp_df.sort_values("real_throughput_2023", ascending=False)
+        st.dataframe(ui.zh(cmp_df.sort_values("real_throughput_2023", ascending=False)
                      [["iata", "name", "real_throughput_2023", "design_capacity",
-                       "utilization", "coupling", "betweenness"]].head(30),
+                       "utilization", "coupling", "betweenness"]].head(30)),
                      **ui.STRETCH, hide_index=True,
-                     column_config={"utilization": st.column_config.ProgressColumn(
+                     column_config={"容量利用率": st.column_config.ProgressColumn(
                          "容量利用率", min_value=0, max_value=1.2, format="%.3f")})
     else:
         st.info("暂无可对比的吞吐量数据（真实吞吐量覆盖 94 个机场）。")
@@ -369,9 +375,9 @@ with tab_bottleneck:
     else:
         st.info("暂无航段瓶颈数据。")
     st.markdown("**瓶颈机场（按节点瓶颈分降序）**")
-    st.dataframe(airport_df.sort_values("bottleneck", ascending=False).head(20)
+    st.dataframe(ui.zh(airport_df.sort_values("bottleneck", ascending=False).head(20)
                  [["iata", "name", "city", "country", "bottleneck", "coupling",
-                   "betweenness"]], **ui.STRETCH, hide_index=True)
+                   "betweenness"]]), **ui.STRETCH, hide_index=True)
 
 # ---------------------------------------------------------------- 5 预警与订阅
 with tab_warn:
@@ -391,9 +397,9 @@ with tab_warn:
             ("阈值口径", "0.75 / 0.90", "τ1 / τ2", "green"),
         ])
         s["预警级别"] = s["level"].map({2: "二级（接近饱和）", 1: "一级（偏繁忙）"})
-        st.dataframe(s[["iata", "name", "utilization", "预警级别"]],
+        st.dataframe(ui.zh(s[["iata", "name", "utilization", "预警级别"]]),
                      **ui.STRETCH, hide_index=True,
-                     column_config={"utilization": st.column_config.ProgressColumn(
+                     column_config={"容量利用率": st.column_config.ProgressColumn(
                          "容量利用率", min_value=0, max_value=1.2, format="%.4f")})
     else:
         st.success("当前口径下无容量饱和预警机场。")
@@ -402,7 +408,7 @@ with tab_warn:
         ui.note("下表仅按 2023 年旅客吞吐量衡量繁忙度，<b>不代表接近设计上限</b>；"
                 "饱和判定请以上表为准。", kind="warn")
         if not tp_df.empty:
-            st.dataframe(tp_df[["iata", "name", "throughput_2023", "level"]],
+            st.dataframe(ui.zh(tp_df[["iata", "name", "throughput_2023", "level"]]),
                          **ui.STRETCH, hide_index=True)
         else:
             st.info("暂无高吞吐量繁忙记录。")
@@ -428,7 +434,7 @@ with tab_warn:
                 st.rerun()
     subs = dl.load_subscriptions()
     if not subs.empty:
-        st.dataframe(subs, **ui.STRETCH, hide_index=True)
+        st.dataframe(ui.zh(subs), **ui.STRETCH, hide_index=True)
         del_email = st.selectbox("选择要取消的订阅邮箱", subs["email"].astype(str).tolist())
         if st.button("取消该订阅"):
             dl.save_subscriptions(subs[subs["email"].astype(str) != del_email])
@@ -458,7 +464,7 @@ with tab_vuln:
         ])
         if not vdf.empty:
             st.altair_chart(vulnerability_chart(vdf), **ui.STRETCH)
-        st.dataframe(vdf, **ui.STRETCH, hide_index=True)
+        st.dataframe(ui.zh(vdf), **ui.STRETCH, hide_index=True)
         ui.note("口径：按介数中心性排名依次移除前 K 个机场，观察最大连通分量（LCC）"
                 "的收缩比例；下降越快说明网络越依赖少数核心枢纽。")
     else:
@@ -476,14 +482,16 @@ with tab_drill:
                             format_func=lambda i: NAME_BY_ID.get(str(i), str(i)), key="drill_airport")
         row = airport_df[airport_df["airport_id"] == pick].iloc[0]
         ui.kpi_row([
-            ("年吞吐量", f"{row.get('real_throughput_2023') or 0:,.0f}", "2023 真实值", "blue"),
-            ("设计容量", f"{row.get('design_capacity') or 0:,.0f}", "公开来源", "cyan"),
+            ("年吞吐量", f"{(row.get('real_throughput_2023') or 0) / 10000:,.0f}", "万人次 · 2023 真实值", "blue"),
+            ("设计容量", f"{(row.get('design_capacity') or 0) / 10000:,.0f}", "万人次 · 公开来源", "cyan"),
             ("利用率", f"{row.get('utilization') or 0:.3f}", "吞吐 ÷ 容量", "red"),
             ("耦合权重", f"{row.get('coupling') or 0:.3f}", "综合指标", "green"),
         ])
         detail = row[["iata", "name", "city", "country", "w_degree", "closeness",
                       "betweenness", "pagerank", "bottleneck"]].to_frame("数值")
         detail["数值"] = detail["数值"].astype(str)
+        detail.index = [ui.label(i) for i in detail.index]
+        detail.index.name = "字段"
         st.dataframe(detail, **ui.STRETCH)
 
     with c2:
@@ -567,10 +575,10 @@ with tab_weight:
         l, r = st.columns(2)
         with l:
             st.markdown("**正式口径 Top10（α=0.6 / β=0.4）**")
-            st.dataframe(official, **ui.STRETCH, hide_index=True)
+            st.dataframe(ui.zh(official), **ui.STRETCH, hide_index=True)
         with r:
             st.markdown(f"**当前参数 Top10（α={alpha:.2f} / β={beta:.2f}）**")
-            st.dataframe(trial, **ui.STRETCH, hide_index=True)
+            st.dataframe(ui.zh(trial), **ui.STRETCH, hide_index=True)
         diff = len(set(official["iata"]) ^ set(trial["iata"]))
         st.caption(f"两榜交集变化 {diff} 个机场；瓶颈判定范围取中心性前 {top_k_pct}%。"
                    "参数仅在本页生效，刷新或切换角色后回到默认口径。")
