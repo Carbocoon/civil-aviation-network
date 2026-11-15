@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
-"""数据加载：本地原始数据(.dat)、真实吞吐/容量 CSV，以及 Hive 生产模式（占位）。"""
+"""数据加载：本地原始数据(.dat)、真实吞吐/容量 CSV，以及 Hive 生产模式。
+
+本地模式与 Hive 模式返回同构数据，上层构图与指标计算无需感知数据来源。
+切换方式见 algorithm/config.py 文件头的环境变量说明。
+"""
 import csv
+import re
 import warnings
 
 from .config import (AIRPORTS_FILE, ROUTES_FILE, THROUGHPUT_FILE,
-                     CAPACITY_FILE, HIVE_CONFIG)
+                     CAPACITY_FILE, HIVE_CONFIG, HIVE_DT)
 
 _NULLS = {"", "\\N", "null", "None"}
 
@@ -107,35 +112,143 @@ def load_capacity(path=CAPACITY_FILE):
     return _load_iata_value_file(path, "design_capacity_pax")
 
 
-def load_from_hive():
-    """【待补充】生产模式：从 HiveServer2 读取 ADS 层图节点/边表。
-
-    字段契约见《算法数据接口清单》与 5 号《数据存储设计说明书》：
-      - ads_graph_node: airport_code(PK), airport_name, province, lat, lng,
-                        annual_throughput, designed_capacity, capacity_ratio, node_weight
-      - ads_graph_edge: from_airport_code, to_airport_code, edge_weight,
-                        flight_count, route_throughput
-
-    实现约定（便于成员B 就绪后直接接手）：
-      1) 前置：pip install pyhive thrift；成员B 建好 ADS 表并启动 HiveServer2(10000)；
-         在 config.HIVE_CONFIG 填入真实 host/username/database/auth。
-      2) 连接：pyhive.hive.Connection(**config.HIVE_CONFIG)，查询上述两张表。
-      3) 返回 (airports, routes)，须与 load_airports()/load_routes() **同构**：
-         airports = {airport_code: {"id","name","city","country","iata","icao","lat","lon"}}，
-         routes   = [(from_code, to_code, "", 0, ""), ...]；
-         节点 ID 统一用 airport_code(IATA 三字码)，country 必须保留
-         （China / Hong Kong / Macau / Taiwan），否则区域子图筛选会返回空图。
-      4) 边权 edge_weight 需在构图时覆盖频次权重，可在 graph_builder.build_graph
-         增加可选 edge_weights 参数；上层指标计算逻辑无需改动。
-    """
-    host = HIVE_CONFIG.get("host", "")
-    if not host or "待补充" in host:
-        raise NotImplementedError(
-            "Hive 模式尚未配置：请先在 algorithm/config.py 的 HIVE_CONFIG 填入真实 "
-            "HiveServer2 地址/账号，并确认成员B 已建好 ads_graph_node / ads_graph_edge；"
-            "具体字段与返回结构见本函数文档。"
+# ------------------------------------------------------------------ Hive 模式
+def _hive_connect():
+    """建立 HiveServer2 连接；依赖缺失或地址未配置时给出可执行的提示。"""
+    host = (HIVE_CONFIG.get("host") or "").strip()
+    if not host:
+        raise RuntimeError(
+            "Hive 模式未配置地址。请设置环境变量 CIVIL_AVIATION_HIVE_HOST "
+            "（例如 set CIVIL_AVIATION_HIVE_HOST=192.168.1.10），并确认 HiveServer2 "
+            "端口 10000 已开放；其余可选变量见 algorithm/config.py 文件头。"
         )
-    raise NotImplementedError(
-        f"Hive 数据源 {host}:{HIVE_CONFIG.get('port')} 已配置，但查询逻辑尚未接入；"
-        "请按本函数文档的 4 步约定实现后再切换生产模式。"
-    )
+    try:
+        from pyhive import hive  # 延迟导入：本地模式无需安装 pyhive
+    except ImportError as exc:
+        raise ImportError(
+            "Hive 模式需要 pyhive：请在集群客户端执行 pip install pyhive thrift，"
+            "或改用本地模式（CIVIL_AVIATION_SOURCE=local）。"
+        ) from exc
+    kwargs = {k: v for k, v in HIVE_CONFIG.items() if v not in (None, "")}
+    return hive.Connection(**kwargs)
+
+
+def _safe_dt(dt):
+    """dt 只作为分区值拼进 SQL，先做白名单校验防止注入。"""
+    dt = (dt or "").strip()
+    if dt and not re.fullmatch(r"[\w\-:. ]{1,32}", dt):
+        raise ValueError(f"非法 dt 分区值：{dt!r}")
+    return dt
+
+
+def _fetch_all(cursor, sql):
+    """执行查询并按列名返回 dict 列表（去掉 Hive 返回的 table.column 前缀）。"""
+    cursor.execute(sql)
+    cols = [d[0].split(".")[-1] for d in (cursor.description or [])]
+    return [dict(zip(cols, row)) for row in cursor.fetchall()]
+
+
+def _as_float(v):
+    try:
+        return float(v) if v not in (None, "", "\\N") else None
+    except (TypeError, ValueError):
+        return None
+
+
+def load_from_hive(hive_config=None, dt=None):
+    """生产模式：从 HiveServer2 读取 ADS 层图节点/边表（已实现，可切换）。
+
+    前置条件：
+      1) 成员B 已按 data_engineering/hive_ddl/00_create_tables.sql 建表并跑完 ETL；
+      2) HiveServer2 已启动；客户端 pip install pyhive thrift；
+      3) 通过环境变量或 config.HIVE_CONFIG 提供 host/port/username/database/auth；
+      4) 切换数据源：CIVIL_AVIATION_SOURCE=hive（默认仍为 local）。
+
+    字段契约见《算法数据接口清单》与 docs/algorithm_api.md：
+      ads_graph_node(airport_code, airport_name, city, country, province, lat, lng,
+                     annual_throughput, designed_capacity, capacity_ratio, node_weight, dt)
+      ads_graph_edge(from_airport_code, to_airport_code, edge_weight,
+                     flight_count, route_throughput, dt)
+
+    Returns:
+        (airports, routes, edge_weights, real_tp, real_cap)
+        - airports: {airport_code: {id,name,city,country,iata,icao,lat,lon}}，
+          节点 ID 统一为 airport_code(IATA 三字码)，country 必须保留（含港澳台）。
+        - routes:   [(from_code, to_code, "", 0, ""), ...] 与 load_routes 同构。
+        - edge_weights: {(from_code, to_code): float}，覆盖频次权重。
+        - real_tp / real_cap: 节点 ID -> 真实吞吐 / 设计容量（缺值不写入）。
+    """
+    cfg = dict(HIVE_CONFIG)
+    if hive_config:
+        cfg.update(hive_config)
+    db = cfg.get("database") or "civil_aviation"
+    conn = _hive_connect()
+    cur = conn.cursor()
+    try:
+        partition = _safe_dt(dt if dt is not None else HIVE_DT)
+        if not partition:
+            rows = _fetch_all(cur, f"SELECT MAX(dt) AS dt FROM {db}.ads_graph_node")
+            partition = _safe_dt(str(rows[0].get("dt") or "")) if rows else ""
+        if not partition:
+            raise RuntimeError(
+                f"{db}.ads_graph_node 无可用 dt 分区，请先执行 Spark ETL，"
+                "或用 CIVIL_AVIATION_HIVE_DT 显式指定分区。"
+            )
+
+        node_sql = (
+            "SELECT airport_code, airport_name, city, country, province, lat, lng, "
+            "annual_throughput, designed_capacity, capacity_ratio "
+            f"FROM {db}.ads_graph_node WHERE dt = '{partition}'"
+        )
+        edge_sql = (
+            "SELECT from_airport_code, to_airport_code, edge_weight, flight_count, "
+            f"route_throughput FROM {db}.ads_graph_edge WHERE dt = '{partition}'"
+        )
+        node_rows = _fetch_all(cur, node_sql)
+        edge_rows = _fetch_all(cur, edge_sql)
+    finally:
+        try:
+            cur.close()
+        finally:
+            conn.close()
+
+    if not node_rows:
+        raise RuntimeError(
+            f"{db}.ads_graph_node 在 dt={partition} 分区无数据；请检查 ETL 是否写入该分区。"
+        )
+
+    airports, real_tp, real_cap = {}, {}, {}
+    for r in node_rows:
+        code = _clean(r.get("airport_code")).upper()
+        if not code or code == "\\N":
+            continue
+        airports[code] = {
+            "id": code,
+            "name": _clean(r.get("airport_name")),
+            "city": _clean(r.get("city")) or _clean(r.get("province")),
+            "country": _clean(r.get("country")),
+            "province": _clean(r.get("province")),
+            "iata": code,
+            "icao": "",
+            "lat": _as_float(r.get("lat")),
+            "lon": _as_float(r.get("lng")),
+        }
+        tp = _as_float(r.get("annual_throughput"))
+        cap = _as_float(r.get("designed_capacity"))
+        if tp and tp > 0:
+            real_tp[code] = int(tp)
+        if cap and cap > 0:
+            real_cap[code] = int(cap)
+
+    routes, edge_weights = [], {}
+    for r in edge_rows:
+        s = _clean(r.get("from_airport_code")).upper()
+        d = _clean(r.get("to_airport_code")).upper()
+        if not s or not d or s not in airports or d not in airports or s == d:
+            continue
+        routes.append((s, d, "", 0, ""))
+        w = _as_float(r.get("edge_weight"))
+        if w and w > 0:
+            edge_weights[(s, d)] = w
+
+    return airports, routes, edge_weights, real_tp, real_cap

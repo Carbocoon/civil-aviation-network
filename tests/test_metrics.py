@@ -177,10 +177,109 @@ class TestMetrics(unittest.TestCase):
             with open(path, encoding="utf-8-sig") as f:
                 self.assertEqual(f.read().strip(), "a,b")
 
-    def test_hive_placeholder_gives_actionable_error(self):
-        with self.assertRaises(NotImplementedError) as ctx:
-            loader.load_from_hive()
-        self.assertIn("HIVE_CONFIG", str(ctx.exception))
+    def test_hive_mode_requires_host(self):
+        """未配置地址时给出可执行的提示，而不是含糊的 NotImplementedError。"""
+        with mock.patch.object(loader, "HIVE_CONFIG", {"host": ""}):
+            with self.assertRaises(RuntimeError) as ctx:
+                loader.load_from_hive()
+        self.assertIn("CIVIL_AVIATION_HIVE_HOST", str(ctx.exception))
+
+    def test_load_from_hive_maps_ads_rows(self):
+        """用假 HiveServer2 游标验证 ADS 行 -> 算法同构数据的转换。"""
+        node_desc = [(x,) for x in (
+            "airport_code", "airport_name", "city", "country", "province",
+            "lat", "lng", "annual_throughput", "designed_capacity", "capacity_ratio")]
+        edge_desc = [(x,) for x in (
+            "from_airport_code", "to_airport_code", "edge_weight",
+            "flight_count", "route_throughput")]
+        node_rows = [
+            ("SHA", "上海虹桥", "Shanghai", "China", "Shanghai",
+             31.19, 121.33, 42492745, 40000000, 1.062319),
+            ("PEK", "北京首都", "Beijing", "China", "Beijing",
+             40.08, 116.58, 52879156, None, None),
+        ]
+        edge_rows = [("SHA", "PEK", 12.5, 25, 0), ("PEK", "XXX", 3.0, 6, 0)]
+
+        class FakeCursor:
+            description = node_desc
+
+            def __init__(self):
+                self.sql = ""
+
+            def execute(self, sql):
+                self.sql = sql
+                if "ads_graph_edge" in sql:
+                    self.description = edge_desc
+                    self._rows = edge_rows
+                elif "MAX(dt)" in sql:
+                    self.description = [("dt",)]
+                    self._rows = [("2026-11-13",)]
+                else:
+                    self.description = node_desc
+                    self._rows = node_rows
+
+            def fetchall(self):
+                return self._rows
+
+            def close(self):
+                pass
+
+        class FakeConn:
+            def __init__(self):
+                self.c = FakeCursor()
+
+            def cursor(self):
+                return self.c
+
+            def close(self):
+                pass
+
+        fake_hive = mock.MagicMock()
+        fake_hive.Connection.return_value = FakeConn()
+        fake_pyhive = mock.MagicMock()
+        fake_pyhive.hive = fake_hive
+
+        with mock.patch.dict(sys.modules, {"pyhive": fake_pyhive}), \
+             mock.patch.object(loader, "HIVE_CONFIG", {"host": "unit-test-host"}), \
+             mock.patch.object(loader, "HIVE_DT", "2026-11-13"):
+            airports, routes, edge_w, real_tp, real_cap = loader.load_from_hive()
+
+        self.assertEqual(set(airports), {"SHA", "PEK"})
+        self.assertEqual(airports["SHA"]["country"], "China")   # 区域子图依赖该字段
+        self.assertEqual(airports["SHA"]["iata"], "SHA")        # 节点 ID 用 IATA
+        self.assertEqual(routes, [("SHA", "PEK", "", 0, "")])  # 孤立边被过滤
+        self.assertEqual(edge_w, {("SHA", "PEK"): 12.5})
+        self.assertEqual(real_tp["PEK"], 52879156)
+        self.assertEqual(real_cap, {"SHA": 40000000})           # 缺容量不落占位值
+
+    def test_build_graph_uses_hive_edge_weights(self):
+        airports = {1: {"id": 1, "iata": "AAA"}, 2: {"id": 2, "iata": "BBB"}}
+        routes = [(1, 2, "", 0, "")]
+        G, _ = graph_builder.build_graph(airports, routes, direct_only=False,
+                                         edge_weights={(1, 2): 7.25})
+        self.assertEqual(G[1][2]["weight"], 7.25)
+
+    def test_hive_writer_generates_load_script(self):
+        from algorithm import hive_writer
+        res = {
+            "label": "global",
+            "airport_rows": [{"airport_id": 1, "iata": "AAA", "w_degree": 10,
+                              "closeness": 0.5, "betweenness": 0.1,
+                              "pagerank": 0.2, "coupling": 0.6}],
+            "edge_rows": [{"src_id": 1, "dst_id": 2, "bottleneck": 0.3}],
+            "vuln_by_k": [{"k": 3, "removed": 3, "lcc_drop_ratio": 0.05}],
+            "warnings_rows": [{"airport_id": 1, "iata": "AAA",
+                               "utilization": 1.06, "level": 2}],
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            out, hql, counts = hive_writer.write_load_script(res, dt="2026-11-13",
+                                                            out_dir=tmp)
+            with open(hql, encoding="utf-8") as f:
+                text = f.read()
+            self.assertIn("LOAD DATA LOCAL INPATH 'centrality_result.csv'", text)
+            self.assertIn("PARTITION (dt='2026-11-13')", text)
+            self.assertEqual(counts["ads_saturation_warning"], 1)
+            self.assertTrue(os.path.isfile(os.path.join(out, "bottleneck_result.csv")))
 
 
 if __name__ == "__main__":

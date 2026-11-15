@@ -69,9 +69,11 @@
 ## 与 Hive 的关系
 - 本目录数据为**本地可运行样本**，对应 Hive ADS 层「图节点表 / 图边表」的同构来源；
 - 生产环境由成员B 经 Spark SQL ETL 落地到 Hive，组长算法引擎通过
-  `16.项目源码/civil-aviation-network/algorithm/loader.py: load_from_hive()` 读取
-  （字段契约详见 5 号《数据存储设计说明书》、《算法数据接口清单》与仓库 `docs/algorithm_api.md`；
-  该模式目前仍为占位，需成员B 提供 HiveServer2 地址后接入）。
+  `algorithm/loader.py: load_from_hive()` 读取 ADS 两张图表的指定分区
+  （字段契约详见 5 号《数据存储设计说明书》、《算法数据接口清单》与仓库 `docs/algorithm_api.md`）；
+- 读取逻辑**已实现**，切换方式为设 `CIVIL_AVIATION_SOURCE=hive` 并提供
+  `CIVIL_AVIATION_HIVE_HOST` 等环境变量；目前只缺成员B 集群的 HiveServer2 地址，尚未做真实联调；
+- 算法结果经 `hive_writer.py` 生成 `load_results.hql`，可回灌到 ADS 结果表，形成 Hive 闭环。
 
 > 注：数据拉取受代理网络影响出现过截断，已通过断点续传校验字节数补齐；
 > 若需更新，重新下载并核对 Content-Length 即可。

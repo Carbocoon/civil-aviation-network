@@ -1,6 +1,5 @@
-# 可视化前端（自研 Streamlit 看板）依赖
+# 可视化前端依赖（全部为 streamlit_env 自带包，无需额外联网安装）
 streamlit>=1.36
 pandas>=2.0
-plotly>=5.20
-networkx>=3.0
-openpyxl>=3.0
+numpy>=1.24
+altair>=5.0

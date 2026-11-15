@@ -1,70 +1,114 @@
 # 可视化前端（web_frontend）
 
-成员C 自研的可交互看板，基于 **Streamlit + Plotly + Pandas**，消费算法产出的
-`data/processed/` 结果文件，不实现算法逻辑。
+成员C 自研、组长本轮统一重构的可交互看板，基于 **Streamlit + Pandas + NumPy + Altair**，
+消费算法产出的 `data/processed/` 结果文件，不实现算法逻辑。
+**四个依赖都是现成环境自带包，不需要额外联网安装**（早期版本依赖 plotly /
+networkx，已改用内置库重写，避免环境缺包导致看板打不开）。
+**页面自适应浅色 / 深色主题，控件宽度参数按 Streamlit 实际版本自动选择**，
+base（1.45.1）与 `streamlit_env`（1.52.1）都能直接启动，不需要为不同环境改代码。
 
 ## 目录说明
 
-```
+```text
 web_frontend/
-├── app.py            # Streamlit 主页面（拓扑/排行/对比/瓶颈/预警/脆弱性/下钻/导出）
-├── data_loader.py    # 结果文件读取与容错（路径可配置，不写死本机绝对路径）
+├── app.py            # 页面编排：登录、侧边栏筛选、9 个标签页
+├── ui.py             # 自适应 CSS、hero 头图、KPI 卡片、主题/版本适配常量
+├── charts.py         # 经纬度布局 + 力导向回退；网络图 / 条形图 / 散点图 / 脆弱性双轴图
+├── data_loader.py    # 结果文件读取、列契约、IATA 映射、经纬度读取、订阅记录读写
 ├── requirements.txt  # 前端依赖
-└── subscriptions.csv # 预警订阅记录（运行后自动生成，不入库）
+└── subscriptions.csv # 预警订阅记录（运行后在项目根生成，不入库）
 ```
 
 ## 本地运行
 
-1. 进入仓库根目录，建议先建虚拟环境：
+两种环境都可以，在本目录执行：
+
 ```powershell
-python -m venv .venv
-.venv\Scripts\activate
+# 方式 A：base 环境（Anaconda 自带 Streamlit 1.45.1）
+d:\Anaconda\python.exe -m streamlit run app.py
+
+# 方式 B：独立的 streamlit_env（Streamlit 1.52.1）
+conda activate streamlit_env
+streamlit run app.py
 ```
 
-2. 安装前端依赖：
-```powershell
-pip install -r visualization/web_frontend/requirements.txt
-```
+浏览器打开 `http://localhost:8501`；也可加 `--server.port 8599` 换端口。
 
-3. 准备数据（二选一）：
-   - 在仓库根运行算法生成结果：`python -m algorithm.engine`（需完整 `data/raw/` 数据包）；
-   - 或直接向组长索取 `data/processed/` 结果样例，放到项目根 `data/processed/`。
+`ui.STRETCH` 会按当前 Streamlit 的控件签名自动选择 `width="stretch"`（1.52+）或
+`use_container_width=True`（1.45~1.51），因此两个版本都不会再出现
+`form_submit_button() got an unexpected keyword argument 'width'` 这类报错。
 
-4. 启动看板：
-```powershell
-streamlit run visualization/web_frontend/app.py
-```
-浏览器自动打开（默认 http://localhost:8501）。
+**主题无需配置**：页面底色与正文文字色由 Streamlit 决定（默认跟随系统偏好），
+卡片、边框和次要文字由当前文字色自动派生，浅色 / 深色都可读；图表背景透明，
+坐标轴与图例文字交给 Streamlit 内置主题。想验证可在页面右上角
+⋮ → Settings → Theme 切换 Light / Dark，刷新即生效，代码不用改。
 
-## 数据源与路径约定
+启动前需保证项目根 `data/processed/` 已有算法结果
+（在仓库根执行 `python -m algorithm.engine`，或向组长索取结果样例）。
+路径不写死本机绝对路径：默认逐级向上查找 `data/processed`，也可用环境变量
+`CIVIL_AVIATION_PROJECT_ROOT` 显式指定项目根。
 
-- 默认从项目根 `data/processed/` 读取；若仓库位置变动，可设置环境变量
-  `CIVIL_AVIATION_PROJECT_ROOT` 指向项目根目录。
-- 结果文件（前缀 `global` / `china`）：
-  - `{label}_airport_metrics.csv`：机场指标汇总
-  - `{label}_edge_bottleneck.csv`：航段瓶颈
-  - `{label}_saturation_warnings.csv`：容量饱和预警（正式功能）
-  - `{label}_throughput_warnings.csv`：高吞吐量繁忙度预警（辅助参考，非饱和度）
-  - `{label}_vulnerability.json`：脆弱性仿真
-- 切换 Hive 数据源时，仅替换 `data_loader.py` 的取数来源，页面与图表逻辑不变。
+## 演示账号（课程项目内的轻量角色控制，非生产鉴权）
 
-## 功能与题目需求对照
+| 账号 | 密码 | 角色 | 权限 |
+|---|---|---|---|
+| admin | admin2026 | 系统管理员 | 全部看板 + 调整耦合权重参数（敏感性分析） |
+| analyst | analyst2026 | 航线网络分析师 | 全部看板只读，权重配置页不可修改 |
 
-| 题目需求 | 页面位置 |
+## 页面与题目需求对照
+
+| 需求 | 页面位置 | 已实现的交互 |
+|---|---|---|
+| 1 网络拓扑 | 网络拓扑 | **默认按真实经纬度摆点**（可切回力导向 / 自动）；节点大小/颜色可切换（耦合、吞吐量、中心性、利用率）；**边宽映射航段权重**；连线数量可调；「只看所选机场的相邻机场」局部视图；选择机场查看节点明细并高亮关联航段 |
+| 2 耦合权重配置 | 权重配置 | 管理员可调 α（β 自动互补为 1−α）、瓶颈 Top k%；实时对比「正式口径 Top10」与「当前参数 Top10」；可恢复默认 |
+| 3 中心性排行 | 中心性排行 | 7 种指标排序、机场名/三字码检索、每页条数与翻页、**双列排名对比 + 名次差异标记** |
+| 4 瓶颈识别 | 瓶颈识别 | 瓶颈分前 k% 航段（含起降三字码）+ 瓶颈机场 Top20 |
+| 5 吞吐量与耦合对比 | 吞吐-耦合对比 | 散点图：x=真实吞吐量、y=耦合权重、点大小=加权度、颜色=利用率 |
+| 6 脆弱性评估 | 脆弱性评估 | **K 值参数区**（3/5/10/20 多选）、剩余 LCC 与下降比例双轴图 |
+| 7 容量流量下钻 | 容量流量下钻 | 机场级全部指标 + **航段级按起降三字码查询（如 SHA→PEK）、「反向」按钮、未找到提示** |
+| 8 报表导出 | 报表导出 | 机场指标 / 容量预警 / 航段瓶颈三份 CSV（UTF-8-SIG） |
+| 9 容量饱和预警订阅 | 容量饱和预警 | 一级/二级清单、辅助高吞吐预警折叠区、订阅新增与取消、订阅列表管理 |
+| 10 区域子图筛选 | 侧边栏 | 全球 / 中国（含港澳台）切换 |
+
+## 拓扑图布局
+
+**拓扑图为什么默认用经纬度**：力导向布局会把彼此相连的大枢纽全部拉到画布中心，而航线网络
+恰好是「少数枢纽连成一片」的结构，中心必然堆成一团。现在默认按机场真实经纬度摆点：
+
+| 侧边栏控件 | 作用 |
 |---|---|
-| 1 航线网络拓扑展示 | 「网络拓扑」标签页 |
-| 2 耦合权重口径展示 | 侧边栏 α/β、τ1/τ2 只读说明 |
-| 3 机场中心性排行 | 「中心性排行」标签页 |
-| 4 结构性瓶颈航段/机场识别 | 「瓶颈识别」标签页 |
-| 5 吞吐量排序与耦合对比 | 「吞吐-耦合对比」标签页 |
-| 6 瓶颈脆弱性评估 | 「脆弱性评估」标签页 |
-| 7 容量流量下钻 | 「容量流量下钻」标签页 |
-| 8 分析报表导出 | 页面底部 CSV 下载 |
-| 9 容量饱和预警订阅 | 「容量饱和预警」标签页订阅表单 |
-| 10 区域子图筛选 | 侧边栏 全球 / 中国（含港澳台） |
+| 摆点方式 | 自动（有坐标用经纬度）/ 真实经纬度 / 力导向；找不到坐标时自动回退力导向 |
+| 拓扑图展示节点数 | 按耦合权重取 Top N，默认 90 |
+| 拓扑图最多画几条航段 | 只画两端都在显示集合内的前 N 条，默认 150 |
+| 只看所选机场的相邻机场 | 切换成以选中机场为中心的局部视图 |
 
-## 注意事项
+配套改动：圆点面积上限 900→400、标签由 10 个减到 5 个（外加当前选中机场）、
+非高亮连线透明度压到 0.28、橙线高亮关联航段。按 Top 90 实测，中心区节点占比
+全球从 74.4% 降到 2.2%、中国从 75.6% 降到 12.2%，重叠点对从上千降到个位数。
 
-- `*_saturation_warnings.csv` 是正式饱和预警；`*_throughput_warnings.csv` 仅辅助参考，
-  不得在页面上当作饱和度结论展示。
-- 真实数据与算法产出不入库；`subscriptions.csv` 为本地演示记录。
+经纬度来自项目根 `data/raw/airports.dat`（OpenFlights 原始数据包），**只用于摆点**：
+结果文件、ADS 结果表和 `AIRPORT_COLUMNS` 列契约都不加列；本地按 OpenFlights 数字 ID 匹配，
+Hive 模式下按 IATA 兜底；数据包不存在时看板照常运行，自动回退力导向并在图下注明。
+
+## 关键口径（评审注意）
+
+- **容量饱和预警**（`*_saturation_warnings.csv`）是题目正式功能，按
+  `2023 真实吞吐量 ÷ 真实设计容量` 判定；**高吞吐量预警**只衡量繁忙度，
+  页面明确标注为「辅助参考、非饱和度结论」，不得混用。
+- 权重配置页的参数**只用于看板内敏感性分析**，不改写 `algorithm/config.py` 中已冻结的
+  正式口径（α=0.6、β=0.4、τ1=0.75、τ2=0.90），算法输出的结果文件始终以正式口径为准。
+- 逐航段实际客流无公开数据源；航段下钻中的「估算流量/容量」按
+  「始发机场真实年吞吐量 × 该航段频次占比」分摊，仅用于相对比较。
+  容量饱和预警只用机场级真实数据，不受估算影响。
+- 任何结果文件缺失或为空时均按标准列返回空表，看板不会因缺表头报错。
+- 订阅记录写在项目根 `subscriptions.csv`，当前版本仅本地登记，邮件推送为后续版本功能。
+
+## 数据来源与切换
+
+结果文件（前缀 `global` / `china`）：`{label}_airport_metrics.csv`、
+`{label}_edge_bottleneck.csv`、`{label}_saturation_warnings.csv`、
+`{label}_throughput_warnings.csv`、`{label}_vulnerability.json`，
+以及 `civil_aviation_results.xlsx`。切换到 Hive 数据源时输出目录不变，
+本前端无需改动。
+
+拓扑图另外读取 `data/raw/airports.dat` 的经纬度（仅摆点用，缺失则回退，不影响上述结果文件）。

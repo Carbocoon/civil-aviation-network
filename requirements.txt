@@ -2,6 +2,6 @@
 networkx>=3.0
 openpyxl>=3.0
 
-# 生产模式（Hive 数据源，【待补充】集群配置后启用）
-# pyhive>=0.6
-# thrift>=0.16
+# 生产模式（Hive 数据源）：仅在 CIVIL_AVIATION_SOURCE=hive 时需要
+# 在集群客户端安装：pip install pyhive thrift
+# 连接参数全部通过环境变量提供，见 algorithm/config.py 文件头。

@@ -8,29 +8,28 @@
 - 存储 / 计算：HDFS、Hive、Spark SQL
 - 核心算法：Python + networkx（详见 `algorithm/README.md`）
 - 图数据库：Neo4j（可选）
-- 可视化：Superset（可选）
+- 可视化：Streamlit（主交付）；Superset 为题目可选项，本项目未采用
 
 ## 协作方式（飞书 + GitHub）
 - 文档（需求、计划、纪要、手册、接口清单）统一放在 **飞书**，方便多人实时协作编辑。
 - 代码与技术契约放在本 GitHub 仓库，由组长管理并负责上传。
 - 两边互相链接：飞书《算法数据接口清单》↔ 仓库 `docs/algorithm_api.md`；关键决策在飞书讨论、对应任务用 GitHub Issue 跟踪，避免信息割裂。
 
-## 目录结构（推荐，非强制）
-> 以下目录组织为**推荐方案，并非严格要求**；组员可按实际技术选型调整目录与文件组织方式，只要能跑通并符合接口契约即可。
-
+## 目录结构
 ```
 civil-aviation-network/         ← Git 仓库根
-├── algorithm/                  # 组长：核心算法引擎（Python 包），详见其内 README
-├── tests/                      # test_metrics.py 算法单测；成员D 的集成测试也放这里
-├── data_engineering/           # 成员B：hive_ddl / spark_etl / neo4j_import（待填充）
-├── visualization/              # 成员C：superset / web_frontend（待填充）
+├── algorithm/                  # 组长：核心算法引擎（含 Hive 读取与结果回灌）
+├── data_engineering/           # 成员B：hive_ddl / spark_etl / ETL 执行记录
+├── visualization/              # 成员C：web_frontend（Streamlit 看板，主交付）
+├── tests/                      # 组长算法单测 23 项 + 成员D 集成测试 7 项
 ├── docs/                       # 技术文档（algorithm_api.md：算法接口契约）
-├── requirements.txt            # Python 依赖
+├── data/raw/                   # 数据说明与吞吐/容量字典（真实 .dat 不入库）
+├── requirements.txt            # 算法依赖
 └── .gitignore
 ```
 
 ## 数据放在哪里（重要）
-真实数据**不入库**，由组长以数据包形式单独提供，位于**项目根 `第64题-项目工件-.../data/raw/`**（在仓库根之外）。
+真实数据**不入库**，由组长以数据包形式单独提供，位于**项目根 `data/raw/`**（在仓库根之外）。
 
 - `algorithm/config.py` 会从 `algorithm/` 开始**逐级向上查找**含 `data/raw/airports.dat` 的目录作为项目根，因此仓库放在 `16.项目源码/` 下或更深一层都能自动找到数据，无需改代码。
 - 若把仓库 clone 到别处，可设置环境变量 `CIVIL_AVIATION_PROJECT_ROOT` 指向项目根目录；找不到必需数据文件时引擎会直接列出缺失路径与解决办法。
@@ -41,11 +40,21 @@ civil-aviation-network/         ← Git 仓库根
 ```bash
 # 在本仓库根目录下执行
 pip install -r requirements.txt
-python -m algorithm.engine                              # 本地模式：读 data/raw，结果写入 data/processed/
-python -m unittest discover -s tests -p "test_*.py" -v   # 算法单元测试（20 项）
+python -m algorithm.engine                              # 本地模式：读项目根 data/raw，结果写入 data/processed/
+python -m unittest discover -s tests -p "test_*.py" -v   # 自动化测试（30 项：23 单测 + 7 集成）
+
+# Streamlit 看板（base / streamlit_env 均可，自动适配 Streamlit 1.45 与 1.52+）
+streamlit run visualization/web_frontend/app.py --server.port 8599
 ```
 
-生产模式（Hive）：配置 `algorithm/config.py` 的 `HIVE_CONFIG`、成员B 建库后，由 `loader.load_from_hive()` 读取 ADS 层图节点 / 图边表。具体字段与返回结构见 `docs/algorithm_api.md` 及 `loader.load_from_hive()` 文档；**该模式目前仍为占位，需集群就绪后接入**。
+**生产模式（Hive，已实现，待集群联调）**：设置环境变量即可切换，不需要改代码。
+```bash
+export CIVIL_AVIATION_SOURCE=hive
+export CIVIL_AVIATION_HIVE_HOST=<HiveServer2 地址>
+export CIVIL_AVIATION_HIVE_DB=civil_aviation
+python -m algorithm.engine
+```
+引擎通过 `loader.load_from_hive()` 读取 ADS 层 `ads_graph_node` / `ads_graph_edge`，用 ADS 的 `edge_weight` 覆盖本地频次权重；计算结束后 `hive_writer.py` 在 `data/processed/hive_load/` 生成 5 张结果表 CSV 与 `load_results.hql`，在 Hive 端执行即可回灌。字段契约与联调清单见 `docs/algorithm_api.md` 和 5 号《数据存储设计说明书》。当前只缺集群地址/账号，本机尚未做真实联调。
 
 ## 如何贡献
 1. 从 `main` 切出功能分支（如 `feature/data-pipeline`）。

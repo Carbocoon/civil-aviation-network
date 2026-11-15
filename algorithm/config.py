@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
-"""参数与路径配置（组长负责，【待补充】项需按实验/集群实际填写）。"""
+"""参数与路径配置。
+
+所有集群相关参数均可通过环境变量覆盖，无需修改源码：
+  CIVIL_AVIATION_SOURCE        local(默认) / hive
+  CIVIL_AVIATION_HIVE_HOST     HiveServer2 地址
+  CIVIL_AVIATION_HIVE_PORT     端口，默认 10000
+  CIVIL_AVIATION_HIVE_USER     账号
+  CIVIL_AVIATION_HIVE_PASSWORD 密码（无认证可留空）
+  CIVIL_AVIATION_HIVE_AUTH     认证方式，默认 NOSASL
+  CIVIL_AVIATION_HIVE_DB       库名，默认 civil_aviation
+  CIVIL_AVIATION_HIVE_DT       读取的分区，默认取最新分区
+  CIVIL_AVIATION_PROJECT_ROOT  项目根（本地模式定位 data/raw）
+"""
 import os
 
 # ---------- 路径配置 ----------
@@ -27,7 +39,7 @@ def _find_project_root():
     return os.path.abspath(os.path.join(_HERE, "..", ".."))
 
 
-PROJECT_ROOT = _find_project_root()          # 第64题-项目工件-...（项目根，含 data/raw）
+PROJECT_ROOT = _find_project_root()          # 项目根（含 data/raw）
 DATA_RAW_DIR = os.path.join(PROJECT_ROOT, "data", "raw")
 DATA_PROC_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
 
@@ -77,11 +89,22 @@ REGION_KEYWORDS = ["China", "Hong Kong", "Macau", "Taiwan"]
 # Hive ADS 层若只提供中文省市字段时的兼容别名（默认关键词下自动生效）
 REGION_KEYWORDS_CN = ["中国", "香港", "澳门", "台湾"]
 
-# ---------- Hive 生产模式连接（【待补充】集群实际配置） ----------
+# ---------- Hive 生产模式连接（全部支持环境变量覆盖） ----------
+# local = 读项目根 data/raw 的真实数据（本机开发/答辩默认）；
+# hive  = 通过 HiveServer2 读取成员B 建好的 ADS 层图节点/边表（集群联调）。
+DATA_SOURCE = os.environ.get("CIVIL_AVIATION_SOURCE", "local").strip().lower()
+
 HIVE_CONFIG = {
-    "host": "【待补充】HiveServer2 地址",
-    "port": 10000,
-    "username": "【待补充】",
-    "database": "civil_aviation",
-    "auth": "NOSASL",
+    "host": os.environ.get("CIVIL_AVIATION_HIVE_HOST", ""),
+    "port": int(os.environ.get("CIVIL_AVIATION_HIVE_PORT", "10000")),
+    "username": os.environ.get("CIVIL_AVIATION_HIVE_USER", ""),
+    "password": os.environ.get("CIVIL_AVIATION_HIVE_PASSWORD", ""),
+    "database": os.environ.get("CIVIL_AVIATION_HIVE_DB", "civil_aviation"),
+    "auth": os.environ.get("CIVIL_AVIATION_HIVE_AUTH", "NOSASL"),
 }
+
+# 读取的 dt 分区；留空时由 loader 自动查询最大分区
+HIVE_DT = os.environ.get("CIVIL_AVIATION_HIVE_DT", "")
+
+# 结果回灌 Hive 时使用的分区（本地生成 SQL 脚本，集群上执行）
+HIVE_RESULT_DT = os.environ.get("CIVIL_AVIATION_HIVE_RESULT_DT", "")

@@ -4,16 +4,23 @@
 运行方式（在含 algorithm/ 与 tests/ 的仓库根目录下执行）：
   1) 本地模式（默认，读项目根 data/raw 真实数据）：
        python -m algorithm.engine
-  2) Hive 生产模式（待集群配置后启用）：
-       在 config.HIVE_CONFIG 填真实连接，调用 loader.load_from_hive()
+  2) Hive 生产模式（成员B 的 ADS 表就绪后切换）：
+       set CIVIL_AVIATION_SOURCE=hive
+       set CIVIL_AVIATION_HIVE_HOST=<HiveServer2 地址>
+       python -m algorithm.engine
+     其余连接参数见 config.py 文件头。
+两种模式输出完全一致的结果文件，并额外生成 Hive 结果回灌脚本
+data/processed/hive_load/load_results.hql。
 """
 import os
 
 import networkx as nx
 from . import config
-from .loader import load_airports, load_routes, load_throughput, load_capacity
+from .loader import (load_airports, load_routes, load_throughput, load_capacity,
+                     load_from_hive)
 from .graph_builder import build_graph
 from . import metrics
+from .hive_writer import write_load_script
 from .vulnerability import vulnerability_simulation
 from .warning import saturation_warning, throughput_warning
 from .regional import filter_region
@@ -58,11 +65,14 @@ def run_analysis(G, label="global", real_tp=None, real_cap=None):
     edge_rows = build_edge_rows(G, edge_bottleneck_map, edge_coupling_map)
     p_air = write_csv(airport_rows, f"{label}_airport_metrics.csv")
     p_edge = write_csv(edge_rows, f"{label}_edge_bottleneck.csv")
-    p_warn = write_csv(
-        [{"airport_id": w["node"], "iata": G.nodes[w["node"]].get("iata", ""),
-          "name": G.nodes[w["node"]].get("name", ""),
-          "utilization": round(w["utilization"], 6), "level": w["level"]} for w in warnings],
-        f"{label}_saturation_warnings.csv", fieldnames=SATURATION_WARNING_FIELDS)
+    warning_rows = [
+        {"airport_id": w["node"], "iata": G.nodes[w["node"]].get("iata", ""),
+         "name": G.nodes[w["node"]].get("name", ""),
+         "utilization": round(w["utilization"], 6), "level": w["level"]}
+        for w in warnings
+    ]
+    p_warn = write_csv(warning_rows, f"{label}_saturation_warnings.csv",
+                       fieldnames=SATURATION_WARNING_FIELDS)
     p_tpw = write_csv(
         [{"airport_id": w["node"], "iata": w["iata"], "name": w["name"],
           "throughput_2023": w["throughput"], "level": w["level"]} for w in tp_warnings],
@@ -80,46 +90,57 @@ def run_analysis(G, label="global", real_tp=None, real_cap=None):
         "vuln_base_lcc": vuln["base_lcc"],
         "vuln_by_k": vuln["by_k"],
         "airport_rows": airport_rows,
+        "edge_rows": edge_rows,
+        "warnings_rows": warning_rows,
         "files": {"airport": p_air, "edge": p_edge, "warnings": p_warn,
                   "tp_warnings": p_tpw, "vuln": p_vuln},
     }
 
 
 def main():
-    missing = [p for p in config.REQUIRED_DATA_FILES if not os.path.isfile(p)]
-    if missing:
-        raise FileNotFoundError(
-            "缺少原始数据文件：\n  " + "\n  ".join(missing) +
-            "\n请确认 data/raw/ 数据包已放在项目根，或设置环境变量 "
-            "CIVIL_AVIATION_PROJECT_ROOT 指向项目根目录。"
+    if config.DATA_SOURCE == "hive":
+        print(">> 加载 Hive ADS 层图数据（生产模式）...")
+        airports, routes, edge_weights, real_tp, real_cap = load_from_hive()
+        print(f"   机场节点: {len(airports)}  航段: {len(routes)}  "
+              f"真实吞吐量: {len(real_tp)} 条  设计容量: {len(real_cap)} 条")
+        print(">> 构建航线网络有向加权图（使用 ADS 层 edge_weight）...")
+        G, info = build_graph(airports, routes, edge_weights=edge_weights)
+    elif config.DATA_SOURCE == "local":
+        missing = [p for p in config.REQUIRED_DATA_FILES if not os.path.isfile(p)]
+        if missing:
+            raise FileNotFoundError(
+                "缺少原始数据文件：\n  " + "\n  ".join(missing) +
+                "\n请确认 data/raw/ 数据包已放在项目根，或设置环境变量 "
+                "CIVIL_AVIATION_PROJECT_ROOT 指向项目根目录。"
+            )
+        print(">> 加载原始数据（本地模式）...")
+        airports = load_airports()
+        routes = load_routes()
+        print(f"   机场: {len(airports)}  航段记录: {len(routes)}")
+
+        tp_iata = load_throughput() if config.USE_REAL_THROUGHPUT else {}
+        tp_note = "（来源 airport_throughput_2023.csv）" if config.USE_REAL_THROUGHPUT \
+            else "（真实数据开关已关闭）"
+        print(f"   真实吞吐量记录: {len(tp_iata)} 条{tp_note}")
+
+        cap_iata = load_capacity() if config.USE_REAL_CAPACITY else {}
+        cap_note = "（来源 airport_capacity_2023.csv）" if config.USE_REAL_CAPACITY \
+            else "（真实数据开关已关闭）"
+        print(f"   真实设计容量记录: {len(cap_iata)} 条{cap_note}")
+
+        print(">> 构建航线网络有向加权图...")
+        G, info = build_graph(airports, routes)
+        real_tp = metrics.build_real_throughput_map(G, tp_iata)
+        real_cap = metrics.build_real_capacity_map(G, cap_iata)
+        print(f"   成功对照真实吞吐量的图节点: {len(real_tp)} 个")
+        print(f"   成功对照真实设计容量的图节点: {len(real_cap)} 个")
+    else:
+        raise ValueError(
+            f"未知数据源 {config.DATA_SOURCE!r}；CIVIL_AVIATION_SOURCE 只支持 local / hive。"
         )
 
-    print(">> 加载原始数据（本地模式）...")
-    airports = load_airports()
-    routes = load_routes()
-    print(f"   机场: {len(airports)}  航段记录: {len(routes)}")
-
-    # 真实吞吐量（2023 年真实旅客吞吐量，按 IATA 接入）
-    tp_iata = load_throughput() if config.USE_REAL_THROUGHPUT else {}
-    tp_note = "（来源 airport_throughput_2023.csv）" if config.USE_REAL_THROUGHPUT \
-        else "（真实数据开关已关闭）"
-    print(f"   真实吞吐量记录: {len(tp_iata)} 条{tp_note}")
-
-    # 真实设计容量（权威公开来源，按 IATA 接入）
-    cap_iata = load_capacity() if config.USE_REAL_CAPACITY else {}
-    cap_note = "（来源 airport_capacity_2023.csv）" if config.USE_REAL_CAPACITY \
-        else "（真实数据开关已关闭）"
-    print(f"   真实设计容量记录: {len(cap_iata)} 条{cap_note}")
-
-    print(">> 构建航线网络有向加权图...")
-    G, info = build_graph(airports, routes)
     print(f"   节点={info['nodes']} 边={info['edges']} "
           f"孤立航段={info['skipped_orphan_routes']} 自环={info['self_loops_removed']}")
-
-    real_tp = metrics.build_real_throughput_map(G, tp_iata)
-    real_cap = metrics.build_real_capacity_map(G, cap_iata)
-    print(f"   成功对照真实吞吐量的图节点: {len(real_tp)} 个")
-    print(f"   成功对照真实设计容量的图节点: {len(real_cap)} 个")
 
     print(">> 运行全局核心算法...")
     g_res = run_analysis(G, label="global", real_tp=real_tp, real_cap=real_cap)
@@ -127,8 +148,12 @@ def main():
     print(">> 运行中国区域子图核心算法（含港澳台）...")
     Gc = filter_region(G)
     if Gc.number_of_nodes() > 0:
-        real_tp_c = metrics.build_real_throughput_map(Gc, tp_iata)
-        real_cap_c = metrics.build_real_capacity_map(Gc, cap_iata)
+        # real_tp / real_cap 在两种数据源下都已统一为「节点ID -> 数值」：
+        # 本地模式由 CSV 映射构造，Hive 模式由 ADS 字段构造。按子图节点过滤即可，
+        # 不能依赖只在 local 分支存在的 tp_iata / cap_iata（Hive 模式会 NameError）。
+        c_nodes = set(Gc.nodes())
+        real_tp_c = {n: v for n, v in real_tp.items() if n in c_nodes}
+        real_cap_c = {n: v for n, v in real_cap.items() if n in c_nodes}
         c_res = run_analysis(Gc, label="china", real_tp=real_tp_c, real_cap=real_cap_c)
         print(f"   中国子图: 节点={c_res['n_nodes']} 边={c_res['n_edges']} "
               f"容量预警={c_res['n_warnings']} 高吞吐量预警={c_res['n_tp_warnings']}")
@@ -159,6 +184,10 @@ def main():
     for kk in g_res["vuln_by_k"]:
         print(f"   k={kk['k']:>2} 移除={kk['removed']:>2} LCC={kk['lcc']:>5} "
               f"下降={kk['lcc_drop_ratio']*100:5.1f}%")
+    # 结果回灌 Hive 的加载脚本（本地也能生成，便于成员B 在集群上执行）
+    load_dir, hql, counts = write_load_script(g_res, c_res)
+    print(f"   Hive 结果回灌脚本: {hql}（{sum(counts.values())} 行 / 5 张 ADS 结果表）")
+
     print(f"\n>> 结果文件已写入: {config.DATA_PROC_DIR}")
     print(f"   汇总 Excel: {excel_path}")
     return g_res, c_res
