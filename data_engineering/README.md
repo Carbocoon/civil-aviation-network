@@ -27,18 +27,19 @@ IATA 三字码，缺设计容量的机场保持 NULL —— 这三条是《算�
 
 ## 原始数据位置（重要）
 
-**四个 raw 文件不在 Git 仓库内**（`*.dat` 体积大，已由 `.gitignore` 排除），完整数据包在
-**项目根 `data/raw/`**：
+四个 raw 文件**随仓库提交**，位于仓库内 `data/raw/`（项目根 `data/raw/` 另有一份
+内容一致的交付副本）。早期 `.gitignore` 曾排除 `*.dat` 与 `data/processed/`，现已取消，
+clone 后可直接运行 ETL、算法引擎与测试，无需再单独索取数据包。
 
 ```text
-airports.dat / routes.dat / airlines.dat          OpenFlights 结构数据
+airports.dat / routes.dat                        OpenFlights 结构数据
 airport_throughput_2023.csv                      94 个机场真实年旅客吞吐量
 airport_capacity_2023.csv                        20 个机场真实设计容量（带来源）
 ```
 
-仓库内 `data/raw/` 只放了两个 CSV 副本与说明。作业会按以下顺序自动查找含四个文件的目录，
-**无需手写绝对路径**：`--input-root` → 环境变量 `CIVIL_AVIATION_PROJECT_ROOT` → 从脚本位置
-逐级向上查找。四个文件缺任意一个都会报出已检查的路径清单，不会静默读空。
+作业会按以下顺序自动查找含四个文件的目录，**无需手写绝对路径**：`--input-root` →
+环境变量 `CIVIL_AVIATION_PROJECT_ROOT` → 从脚本位置逐级向上查找。四个文件缺任意一个
+都会报出已检查的路径清单，不会静默读空。
 
 ## 客流字段口径（评审请以此为准）
 

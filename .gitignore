@@ -9,9 +9,11 @@ __pycache__/
 venv/
 .env
 
-# 真实数据与算法产出（均位于项目根 data/，本仓库之外；此处再兜底防误提交）
-*.dat
-data/processed/
+# 运行期产物与本地缓存
+# 说明：data/raw/ 与 data/processed/ 已纳入版本管理，供云端部署和 clone 后直接测试，
+#       不再使用 *.dat / data/processed/ 排除规则。
+# subscriptions.csv 由看板运行时生成，重新部署会重置，故不入库
+subscriptions.csv
 metastore_db/
 spark-warehouse/
 derby.log

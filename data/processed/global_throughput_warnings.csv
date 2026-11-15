@@ -1,0 +1,49 @@
+﻿airport_id,iata,name,throughput_2023,level
+3682,ATL,Hartsfield Jackson Atlanta International Airport,104653451,2
+2188,DXB,Dubai International Airport,86994365,2
+3670,DFW,Dallas Fort Worth International Airport,81755538,2
+507,LHR,London Heathrow Airport,79183364,2
+2359,HND,Tokyo Haneda International Airport,78719302,2
+3751,DEN,Denver International Airport,77837917,2
+13696,IST,Istanbul Airport,76027321,2
+3484,LAX,Los Angeles International Airport,75050875,2
+3830,ORD,Chicago O'Hare International Airport,73894226,2
+3093,DEL,Indira Gandhi International Airport,72214841,2
+1382,CDG,Charles de Gaulle International Airport,67421316,2
+3370,CAN,Guangzhou Baiyun International Airport,63167751,2
+3797,JFK,John F Kennedy International Airport,62464331,2
+580,AMS,Amsterdam Airport Schiphol,61889586,2
+1229,MAD,Adolfo Suárez Madrid–Barajas Airport,60181604,2
+340,FRA,Frankfurt am Main Airport,59355389,1
+3316,SIN,Singapore Changi Airport,58946000,1
+3878,MCO,Orlando International Airport,57735726,1
+3877,LAS,McCarran International Airport,57666456,1
+3930,ICN,Incheon International Airport,56235412,1
+3406,PVG,Shanghai Pudong International Airport,54476397,1
+3876,CLT,Charlotte Douglas International Airport,53445770,1
+3364,PEK,Beijing Capital International Airport,52879156,1
+3374,SZX,Shenzhen Bao'an International Airport,52734934,1
+3576,MIA,Miami International Airport,52340934,1
+3885,BKK,Suvarnabhumi Airport,51699104,1
+2997,BOM,Chhatrapati Shivaji International Airport,51589040,1
+3577,SEA,Seattle Tacoma International Airport,50877260,1
+3469,SFO,San Francisco International Airport,50196094,1
+1218,BCN,Barcelona International Airport,49883928,1
+3275,CGK,Soekarno-Hatta International Airport,49080532,1
+3494,EWR,Newark Liberty International Airport,49080532,1
+3462,PHX,Phoenix Sky Harbor International Airport,48654432,1
+1824,MEX,Licenciado Benito Juarez International Airport,48416008,1
+3304,KUL,Kuala Lumpur International Airport,47242468,1
+3550,IAH,George Bush Intercontinental Houston Airport,46168662,1
+11051,DOH,Hamad International Airport,45916098,1
+2397,MNL,Ninoy Aquino International Airport,45300322,1
+193,YYZ,Lester B. Pearson International Airport,44761805,1
+3393,CKG,Chongqing Jiangbei International Airport,44657227,1
+2072,JED,King Abdulaziz International Airport,42910407,1
+3391,SHA,Shanghai Hongqiao International Airport,42492745,1
+3382,KMG,Kunming Changshui International Airport,42033527,1
+3379,XIY,Xi'an Xianyang International Airport,41371228,1
+3386,HGH,Hangzhou Xiaoshan International Airport,41170470,1
+502,LGW,London Gatwick Airport,40905856,1
+3448,BOS,General Edward Lawrence Logan International Airport,40861658,1
+3205,SGN,Tan Son Nhat International Airport,40738295,1

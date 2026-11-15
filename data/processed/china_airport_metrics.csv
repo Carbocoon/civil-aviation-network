@@ -1,0 +1,271 @@
+﻿airport_id,iata,name,city,country,w_degree,w_out,w_in,closeness,betweenness,pagerank,design_capacity,real_throughput_2023,utilization,coupling,bottleneck
+3391,SHA,Shanghai Hongqiao International Airport,Shanghai,China,389,194,195,0.406845,0.01383,0.02122028,40000000,42492745,1.062319,0.866552,0.279785
+3386,HGH,Hangzhou Xiaoshan International Airport,Hangzhou,China,466,232,234,0.399021,0.013317,0.02304746,50000000,41170470,0.823409,0.768567,0.222347
+3364,PEK,Beijing Capital International Airport,Beijing,China,679,340,339,0.488213,0.02712,0.03997242,100000000,52879156,0.528792,0.717275,0.354414
+3395,CTU,Chengdu Shuangliu International Airport,Chengdu,China,591,296,295,0.451067,0.036227,0.03362826,50000000,30138101,0.602762,0.709816,0.498697
+3374,SZX,Shenzhen Bao'an International Airport,Shenzhen,China,427,214,213,0.420589,0.020935,0.02235559,80000000,52734934,0.659187,0.647058,0.286806
+3393,CKG,Chongqing Jiangbei International Airport,Chongqing,China,510,255,255,0.429291,0.033675,0.02693169,80000000,44657227,0.558215,0.635371,0.421551
+3379,XIY,Xi'an Xianyang International Airport,Xi'an,China,545,274,271,0.429291,0.039944,0.0288756,83000000,41371228,0.498449,0.62013,0.468598
+3370,CAN,Guangzhou Baiyun International Airport,Guangzhou,China,494,248,246,0.459389,0.047674,0.02692459,120000000,63167751,0.526398,0.606855,0.566626
+3382,KMG,Kunming Changshui International Airport,Kunming,China,491,246,245,0.409521,0.037631,0.02795354,95000000,42033527,0.442458,0.554724,0.393552
+3406,PVG,Shanghai Pudong International Airport,Shanghai,China,457,228,229,0.424896,0.026493,0.02437214,120000000,54476397,0.45397,0.541601,0.276623
+10209,PKX,Beijing Daxing International Airport,Beijing,China,0,0,0,0.0,0.0,0.00076181,72000000,39410776,0.547372,0.328423,0.0
+3383,XMN,Xiamen Gaoqi International Airport,Xiamen,China,410,205,205,0.390265,0.003949,0.02084476,,24104090,0.0,0.241532,0.010005
+3371,CSX,Changsha Huanghua International Airport,Changcha,China,353,177,176,0.408178,0.013975,0.01805183,,27248260,0.0,0.207953,0.030478
+3376,WUH,Wuhan Tianhe International Airport,Wuhan,China,350,175,175,0.400304,0.013244,0.01791167,,25861764,0.0,0.206186,0.028638
+3375,CGO,Zhengzhou Xinzheng International Airport,Zhengzhou,China,340,170,170,0.389045,0.005016,0.01713449,,25357505,0.0,0.200295,0.010536
+3390,TAO,Liuting Airport,Qingdao,China,326,163,163,0.376116,0.00776,0.01710338,,21420712,0.0,0.192047,0.015629
+3388,NKG,Nanjing Lukou Airport,Nanjing,China,304,152,152,0.384242,0.007375,0.01483855,,27340469,0.0,0.179087,0.013851
+3368,TSN,Tianjin Binhai International Airport,Tianjin,China,270,135,135,0.385432,0.009829,0.01380837,,18472530,0.0,0.159057,0.016397
+3394,KWE,Longdongbao Airport,Guiyang,China,270,135,135,0.376116,0.011943,0.01400687,,19470638,0.0,0.159057,0.019923
+3077,HKG,Hong Kong International Airport,Hong Kong,Hong Kong,261,130,131,0.377256,0.014154,0.01352261,,,0.0,0.153756,0.022824
+3399,URC,Ürümqi Diwopu International Airport,Urumqi,China,254,127,127,0.368327,0.037895,0.01959425,,25088961,0.0,0.149632,0.05947
+4108,TNA,Yaoqiang Airport,Jinan,China,250,125,125,0.373857,0.002221,0.01265843,,17561028,0.0,0.147275,0.003431
+2276,TPE,Taiwan Taoyuan International Airport,Taipei,Taiwan,242,121,121,0.381885,0.001334,0.01193995,,,0.0,0.142563,0.001994
+3404,DLC,Zhoushuizi Airport,Dalian,China,241,120,121,0.368327,0.028241,0.01305551,,16133238,0.0,0.141973,0.042051
+3385,FOC,Fuzhou Changle International Airport,Fuzhou,China,240,120,120,0.368327,0.001218,0.01180809,,13204723,0.0,0.141384,0.001806
+3400,HRB,Taiping Airport,Harbin,China,233,117,116,0.370519,0.024872,0.01393476,,20805167,0.0,0.137261,0.035804
+4144,SHE,Taoxian Airport,Shenyang,China,232,116,116,0.36942,0.017762,0.0122708,,20564385,0.0,0.136672,0.025459
+3369,TYN,Taiyuan Wusu Airport,Taiyuan,China,216,108,108,0.38306,0.002529,0.01114395,,12796462,0.0,0.127246,0.003376
+4030,SYX,Sanya Phoenix International Airport,Sanya,China,216,108,108,0.361902,0.002083,0.01058526,,21775758,0.0,0.127246,0.00278
+3373,NNG,Nanning Wuxu Airport,Nanning,China,210,105,105,0.35981,0.002578,0.01044985,,13689746,0.0,0.123711,0.003344
+4120,HAK,Haikou Meilan International Airport,Haikou,China,209,105,104,0.356718,0.003159,0.01032124,,24340405,0.0,0.123122,0.004079
+3372,KWL,Guilin Liangjiang International Airport,Guilin,China,205,102,103,0.358774,0.003931,0.01017485,,5258592,0.0,0.120766,0.004979
+6345,HET,Baita International Airport,Hohhot,China,174,87,87,0.36724,0.015342,0.0111851,,11304646,0.0,0.102504,0.016493
+3384,KHN,Nanchang Changbei International Airport,Nanchang,China,168,84,84,0.36616,0.003757,0.00862516,,10205783,0.0,0.098969,0.0039
+3378,LHW,Lanzhou Zhongchuan Airport,Lanzhou,China,166,83,83,0.360853,0.006794,0.00963731,,15637379,0.0,0.097791,0.006968
+6347,SJW,Shijiazhuang Daguocun International Airport,Shijiazhuang,China,162,81,81,0.362958,0.007495,0.00915228,,9863183,0.0,0.095434,0.007501
+6341,NAY,Beijing Nanyuan Airport,Beijing,China,160,80,80,0.345818,0.00635,0.01268664,,,0.0,0.094256,0.006277
+6392,WNZ,Wenzhou Longwan International Airport,Wenzhou,China,158,79,79,0.360853,0.002842,0.00814694,,11688220,0.0,0.093078,0.002775
+3387,NGB,Ningbo Lishe International Airport,Ninbo,China,158,79,79,0.360853,0.002691,0.00815279,,12901552,0.0,0.093078,0.002627
+3389,HFE,Hefei Luogang International Airport,Hefei,China,151,75,76,0.35981,0.004298,0.00771115,,11171368,0.0,0.088954,0.00401
+4085,,Yinchuan Airport,Yinchuan,China,131,65,66,0.365086,0.010748,0.0073024,,,0.0,0.077172,0.008699
+4033,LJG,Lijiang Airport,Lijiang,China,125,63,62,0.34775,0.004889,0.00666761,,7440858,0.0,0.073638,0.003776
+4380,CGQ,Longjia Airport,Changchun,China,123,60,63,0.34296,0.005643,0.00657516,,15483709,0.0,0.072459,0.004288
+6355,ZUH,Zhuhai Jinwan Airport,Zhuhai,China,119,60,59,0.343907,0.005874,0.00650585,,11457255,0.0,0.070103,0.004319
+3121,MFM,Macau International Airport,Macau,Macau,108,54,54,0.337383,0.000595,0.00565808,,,0.0,0.063623,0.000397
+6366,XNN,Xining Caojiabu Airport,Xining,China,99,49,50,0.343907,0.010238,0.00682312,,7022325,0.0,0.058321,0.006262
+3392,YNT,Yantai Laishan Airport,Yantai,China,98,49,49,0.342018,0.00041,0.00526064,,7530370,0.0,0.057732,0.000248
+2264,KHH,Kaohsiung International Airport,Kaohsiung,Taiwan,88,44,44,0.343907,0.015547,0.0051643,,,0.0,0.051841,0.008453
+6386,JJN,Quanzhou Jinjiang International Airport,Quanzhou,China,88,44,44,0.330224,0.000677,0.00488987,,6723782,0.0,0.051841,0.000368
+6390,WUX,Sunan Shuofang International Airport,Wuxi,China,88,44,44,0.333765,0.000381,0.00470739,,8797707,0.0,0.051841,0.000207
+4109,CZX,Changzhou Benniu Airport,Changzhou,China,74,37,37,0.339222,0.001097,0.00426805,,4029263,0.0,0.043594,0.000501
+4302,SWA,Jieyang Chaoshan International Airport,Shantou,China,67,33,34,0.333765,0.004444,0.00390002,,7182236,0.0,0.03947,0.00184
+2275,TSA,Taipei Songshan Airport,Taipei,Taiwan,64,32,32,0.319216,0.007542,0.00511904,,,0.0,0.037703,0.002982
+4097,LXA,Lhasa Gonggar Airport,Lhasa,China,58,29,29,0.326757,0.014724,0.0046506,,5471404,0.0,0.034168,0.005276
+6346,BAV,Baotou Airport,Baotou,China,58,29,29,0.340149,0.004407,0.00357547,,,0.0,0.034168,0.001579
+6430,YCU,Yuncheng Guangong Airport,Yuncheng,China,58,29,29,0.343907,0.001173,0.00349174,,,0.0,0.034168,0.00042
+2268,RMQ,Taichung Ching Chuang Kang Airport,Taichung,Taiwan,50,25,25,0.312016,0.008543,0.00357469,,,0.0,0.029455,0.002639
+6434,DSN,Ordos Ejin Horo Airport,Dongsheng,China,50,25,25,0.34775,0.012258,0.00318135,,,0.0,0.029455,0.003787
+6361,YIH,Yichang Sanxia Airport,Yichang,China,48,24,24,0.332873,0.003063,0.00295538,,3007545,0.0,0.028277,0.000908
+6387,TXN,Tunxi International Airport,Huangshan,China,46,23,23,0.331985,0.003515,0.00283572,,,0.0,0.027099,0.000999
+3381,JHG,Xishuangbanna Gasa Airport,Jinghonggasa,China,46,23,23,0.298548,0.000955,0.00330086,,6934208,0.0,0.027099,0.000271
+6400,MIG,Mianyang Airport,Mianyang,China,43,22,21,0.331985,0.005957,0.00272971,,3103772,0.0,0.025331,0.001583
+6353,DYG,Dayong Airport,Dayong,China,42,21,21,0.320037,0.000637,0.00265369,,,0.0,0.024742,0.000165
+4149,XUZ,Xuzhou Guanyin Airport,Xuzhou,China,40,20,20,0.330224,0.006997,0.00261289,,,0.0,0.023564,0.001729
+6351,BHY,Beihai Airport,Beihai,China,40,20,20,0.332873,0.003065,0.00264145,,,0.0,0.023564,0.000758
+6357,ZHA,Zhanjiang Airport,Zhanjiang,China,38,19,19,0.328481,0.001363,0.00259582,,,0.0,0.022386,0.00032
+8876,YTY,Yangzhou Taizhou Airport,Yangzhou,China,36,18,18,0.331102,0.001992,0.00239429,,3264505,0.0,0.021208,0.000443
+6385,LYI,Shubuling Airport,Linyi,China,36,18,18,0.321691,0.004364,0.00250899,,,0.0,0.021208,0.000971
+6394,YIW,Yiwu Airport,Yiwu,China,36,18,18,0.340149,0.010641,0.00253381,,,0.0,0.021208,0.002367
+6393,YNZ,Yancheng Airport,Yancheng,China,33,16,17,0.320862,0.002021,0.00230796,,,0.0,0.01944,0.000412
+6343,CIH,Changzhi Airport,Changzhi,China,32,16,16,0.321691,0.001408,0.00236302,,,0.0,0.018851,0.000278
+4301,JZH,Jiuzhai Huanglong Airport,Jiuzhaigou,China,32,16,16,0.309688,0.0,0.00225391,,,0.0,0.018851,0.0
+6380,JDZ,Jingdezhen Airport,Jingdezhen,China,32,16,16,0.321691,0.0,0.00222221,,,0.0,0.018851,0.0
+6383,LYG,Lianyungang Airport,Lianyungang,China,32,16,16,0.327617,0.004765,0.0023722,,,0.0,0.018851,0.000942
+3366,HLD,Dongshan Airport,Hailar,China,32,16,16,0.302906,0.002936,0.00278189,,,0.0,0.018851,0.000581
+9846,ZYI,Zunyi Xinzhou Airport,Zunyi,China,30,15,15,0.330224,0.004589,0.00212832,,,0.0,0.017673,0.000851
+6342,CIF,Chifeng Airport,Chifeng,China,30,15,15,0.308919,0.001902,0.00235265,,,0.0,0.017673,0.000353
+6391,WUS,Nanping Wuyishan Airport,Wuyishan,China,30,15,15,0.319216,0.000839,0.00212046,,,0.0,0.017673,0.000156
+6356,LZH,Liuzhou Bailian Airport,Liuzhou,China,28,14,14,0.327617,0.004367,0.00204507,,,0.0,0.016495,0.000755
+6384,HYN,Huangyan Luqiao Airport,Huangyan,China,28,14,14,0.31046,0.0,0.00204032,,,0.0,0.016495,0.0
+6348,TGO,Tongliao Airport,Tongliao,China,26,13,13,0.305883,0.002081,0.00208433,,,0.0,0.015317,0.000334
+6379,KOW,Ganzhou Airport,Ganzhou,China,26,13,13,0.324204,0.002014,0.00196637,,,0.0,0.015317,0.000323
+6360,XFN,Xiangyang Liuji Airport,Xiangfan,China,26,13,13,0.315976,0.001463,0.00202865,,,0.0,0.015317,0.000235
+6395,HSN,Zhoushan Airport,Zhoushan,China,26,13,13,0.305883,0.000251,0.00208783,,,0.0,0.015317,4e-05
+6399,LZO,Luzhou Airport,Luzhou,China,26,13,13,0.322524,0.004372,0.0019262,,,0.0,0.015317,0.000702
+3397,KHG,Kashgar Airport,Kashi,China,26,13,13,0.293619,0.001104,0.00268313,,3354371,0.0,0.015317,0.000177
+7898,HIA,Lianshui Airport,Huai An,China,24,12,12,0.324204,0.006343,0.00185551,,,0.0,0.014138,0.000941
+6368,UYN,Yulin Yuyang Airport,Yulin,China,24,12,12,0.320862,0.000779,0.00195229,,,0.0,0.014138,0.000115
+6403,WXN,Wanxian Airport,Wanxian,China,24,12,12,0.325902,0.000684,0.001862,,,0.0,0.014138,0.000101
+6344,DAT,Datong Airport,Datong,China,22,11,11,0.308155,0.000918,0.00189054,,,0.0,0.01296,0.000125
+7503,FUG,Fuyang Xiguan Airport,Fuyang,China,22,11,11,0.315176,0.00178,0.00176741,,,0.0,0.01296,0.000242
+4110,YBP,Yibin Caiba Airport,Yibin,China,20,10,10,0.3184,0.000812,0.00168417,,,0.0,0.011782,0.0001
+6743,HMI,Hami Airport,Hami,China,20,10,10,0.308919,0.00049,0.00196011,,,0.0,0.011782,6.1e-05
+6944,JNG,Jining Qufu Airport,Jining,China,20,10,10,0.32935,0.004093,0.00170638,,,0.0,0.011782,0.000506
+6407,KRL,Korla Airport,Korla,China,20,10,10,0.290875,0.000117,0.00198911,,,0.0,0.011782,1.4e-05
+6414,YNJ,Yanji Chaoyangchuan Airport,Yanji,China,20,10,10,0.296415,4.6e-05,0.00169653,,,0.0,0.011782,6e-06
+4148,LYA,Luoyang Airport,Luoyang,China,18,9,9,0.315976,0.002128,0.00161525,,,0.0,0.010604,0.000237
+6397,DAX,Dachuan Airport,Dazhou,China,18,9,9,0.311236,0.0,0.00160787,,,0.0,0.010604,0.0
+6411,JMU,Jiamusi Airport,Jiamusi,China,18,9,9,0.300711,0.000572,0.00161454,,,0.0,0.010604,6.4e-05
+6352,CGD,Changde Airport,Changde,China,16,8,8,0.3184,0.002144,0.00149192,,,0.0,0.009426,0.000212
+6359,NNY,Nanyang Jiangying Airport,Nanyang,China,16,8,8,0.31046,0.001406,0.00157236,,,0.0,0.009426,0.000139
+6398,GYS,Guangyuan Airport,Guangyuan,China,16,8,8,0.305133,0.0,0.00149271,,,0.0,0.009426,0.0
+6413,NDG,Qiqihar Sanjiazi Airport,Qiqihar,China,16,8,8,0.301439,3.2e-05,0.0016007,,,0.0,0.009426,3e-06
+6955,WUA,Wuhai Airport,Wuhai,China,16,8,8,0.301439,4.9e-05,0.00163973,,,0.0,0.009426,5e-06
+9025,BFJ,Bijie Feixiong Airport,Bijie,China,16,8,8,0.305883,0.001158,0.00158021,,,0.0,0.009426,0.000115
+3402,MDG,Mudanjiang Hailang International Airport,Mudanjiang,China,16,8,8,0.296415,0.000612,0.00152403,,,0.0,0.009426,6.1e-05
+8781,JIQ,Qianjiang Wulingshan Airport,Qianjiang,China,14,7,7,0.317588,0.00085,0.00142652,,,0.0,0.008247,7.3e-05
+9843,JUH,Jiuhuashan Airport,Chizhou,China,14,7,7,0.305133,0.000208,0.0014863,,,0.0,0.008247,1.8e-05
+6349,HLH,Ulanhot Airport,Ulanhot,China,14,7,7,0.297834,9e-06,0.0015401,,,0.0,0.008247,1e-06
+6350,XIL,Xilinhot Airport,Xilinhot,China,14,7,7,0.296415,0.0,0.00155951,,,0.0,0.008247,0.0
+4308,DNH,Dunhuang Airport,Dunhuang,China,14,7,7,0.284234,3e-06,0.0014855,,,0.0,0.008247,0.0
+6375,DIG,Diqing Airport,Shangri-La,China,14,7,7,0.299265,0.002127,0.0014987,,,0.0,0.008247,0.000184
+6388,WEF,Weifang Airport,Weifang,China,14,7,7,0.307394,0.001893,0.00139941,,,0.0,0.008247,0.000164
+6427,AQG,Anqing Tianzhushan Airport,Anqing,China,14,7,7,0.309688,0.001324,0.00139372,,,0.0,0.008247,0.000115
+6429,SHP,Shanhaiguan Airport,Qinhuangdao,China,14,7,7,0.277889,0.000112,0.00141329,,,0.0,0.008247,1e-05
+6432,JGN,Jiayuguan Airport,Jiayuguan,China,14,7,7,0.268307,8.7e-05,0.00170627,,,0.0,0.008247,8e-06
+4054,DLU,Dali Airport,Dali,China,14,7,7,0.285538,0.000126,0.00148024,,,0.0,0.008247,1.1e-05
+8407,HDG,Handan Airport,Handan,China,12,6,6,0.308155,0.001493,0.00131674,,,0.0,0.007069,0.000111
+4145,DOY,Dongying Shengli Airport,Dongying,China,12,6,6,0.311236,0.001688,0.00132841,,,0.0,0.007069,0.000125
+6376,LUM,Mangshi Airport,Luxi,China,12,6,6,0.315176,0.000393,0.00134036,,,0.0,0.007069,2.9e-05
+6381,JIU,Jiujiang Lushan Airport,Jiujiang,China,12,6,6,0.302906,4e-05,0.0013198,,,0.0,0.007069,3e-06
+6382,JUZ,Quzhou Airport,Quzhou,China,12,6,6,0.2823,0.0,0.00138206,,,0.0,0.007069,0.0
+6401,NAO,Nanchong Airport,Nanchong,China,12,6,6,0.317588,0.001855,0.00131986,,,0.0,0.007069,0.000138
+6365,IQN,Qingyang Airport,Qingyang,China,12,6,6,0.277889,4.9e-05,0.00141738,,,0.0,0.007069,4e-06
+3398,HTN,Hotan Airport,Hotan,China,12,6,6,0.239412,0.0,0.00154976,,,0.0,0.007069,0.0
+7506,ACX,Xingyi Airport,Xingyi,China,12,6,6,0.305883,0.000659,0.00139272,,,0.0,0.007069,4.9e-05
+8417,JXA,Jixi Xingkaihu Airport,Jixi,China,12,6,6,0.295711,5.5e-05,0.00133126,,,0.0,0.007069,4e-06
+11473,JIC,Jinchuan Airport,Jinchuan,China,12,6,6,0.278511,0.000227,0.00163467,,,0.0,0.007069,1.7e-05
+9107,YIC,Yichun Mingyueshan Airport,Yichun,China,12,6,6,0.305133,7.4e-05,0.00132884,,,0.0,0.007069,5e-06
+6404,AKU,Aksu Airport,Aksu,China,11,6,5,0.277889,0.0,0.00134895,,,0.0,0.00648,0.0
+6367,ENY,Yan'an Ershilipu Airport,Yan'an,China,11,5,6,0.308155,0.000138,0.00140054,,,0.0,0.00648,9e-06
+6963,TEN,Tongren Fenghuang Airport,Tongren,China,10,5,5,0.303645,0.000642,0.00121769,,,0.0,0.005891,4e-05
+9845,DQA,Saertu Airport,Daqing,China,10,5,5,0.289522,0.0,0.00124002,,,0.0,0.005891,0.0
+8826,NBS,Changbaishan Airport,Baishan,China,10,5,5,0.290875,0.000278,0.00122167,,,0.0,0.005891,1.7e-05
+7862,TCZ,Tengchong Tuofeng Airport,Tengchong,China,10,5,5,0.282942,0.00039,0.00126346,,,0.0,0.005891,2.4e-05
+2259,KNH,Kinmen Airport,Kinmen,Taiwan,10,5,5,0.234012,1.2e-05,0.0015121,,,0.0,0.005891,1e-06
+2272,MZG,Makung Airport,Makung,Taiwan,10,5,5,0.234012,1.2e-05,0.0015121,,,0.0,0.005891,1e-06
+6354,MXZ,Meixian Airport,Meixian,China,10,5,5,0.285538,0.000375,0.00124496,,,0.0,0.005891,2.3e-05
+6402,LZY,Nyingchi Airport,Nyingchi,China,10,5,5,0.274217,0.0,0.00128446,,,0.0,0.005891,0.0
+6412,JNZ,Jinzhou Airport,Jinzhou,China,10,5,5,0.274217,1.2e-05,0.00120631,,,0.0,0.005891,1e-06
+6433,DDG,Dandong Airport,Dandong,China,10,5,5,0.293619,0.0,0.00123093,,,0.0,0.005891,0.0
+6954,NZH,Manzhouli Xijiao Airport,Manzhouli,China,10,5,5,0.300711,0.000549,0.00134218,,,0.0,0.005891,3.4e-05
+3396,XIC,Xichang Qingshan Airport,Xichang,China,10,5,5,0.289522,0.000113,0.00123791,,,0.0,0.005891,7e-06
+8630,RLK,Bayannur Tianjitai Airport,Bayannur,China,10,5,5,0.297123,0.000384,0.00125612,,,0.0,0.005891,2.4e-05
+9310,DCY,Daocheng Yading Airport,Daocheng,China,8,4,4,0.271822,0.0,0.00114814,,,0.0,0.004713,0.0
+6435,PZI,Bao'anying Airport,Panzhihua,China,8,4,4,0.281662,0.0,0.00114133,,,0.0,0.004713,0.0
+9849,AVA,Anshun Huangguoshu Airport,Anshun,China,8,4,4,0.296415,4.8e-05,0.00121369,,,0.0,0.004713,2e-06
+2278,HUN,Hualien Airport,Hualien,Taiwan,8,4,4,0.249989,0.000259,0.00120513,,,0.0,0.004713,1.3e-05
+6358,ENH,Enshi Airport,Enshi,China,8,4,4,0.252524,0.0,0.00110977,,,0.0,0.004713,0.0
+6409,YIN,Yining Airport,Yining,China,8,4,4,0.277889,0.0,0.00121763,,,0.0,0.004713,0.0
+8979,JGD,Jiagedaqi Airport,Jiagedaqi District,China,8,4,4,0.241268,3.8e-05,0.00156542,,,0.0,0.004713,2e-06
+6744,WUZ,Wuzhou Changzhoudao Airport,Wuzhou,China,6,3,3,0.250997,8.6e-05,0.00102671,,,0.0,0.003535,3e-06
+6772,CHG,Chaoyang Airport,Chaoyang,China,6,3,3,0.290197,0.0,0.00105419,,,0.0,0.003535,0.0
+6943,OHE,Gu-Lian Airport,Mohe County,China,6,3,3,0.241268,0.003696,0.00159804,,,0.0,0.003535,0.000137
+9844,AOG,Anshan Air Base,Anshan,China,6,3,3,0.292928,0.0,0.00104347,,,0.0,0.003535,0.0
+8845,LLF,Lingling Airport,Yongzhou,China,6,3,3,0.280393,9.1e-05,0.00103386,,,0.0,0.003535,3e-06
+6377,SYM,Pu'er Simao Airport,Simao,China,6,3,3,0.256161,0.0,0.00105155,,,0.0,0.003535,0.0
+6378,ZAT,Zhaotong Airport,Zhaotong,China,6,3,3,0.276654,0.0,0.00104475,,,0.0,0.003535,0.0
+6396,BPX,Qamdo Bangda Airport,Bangda,China,6,3,3,0.274217,0.0,0.0010913,,,0.0,0.003535,0.0
+7508,HZH,Liping Airport,Liping,China,6,3,3,0.279763,0.0,0.00103045,,,0.0,0.003535,0.0
+7519,HJJ,Zhijiang Airport,Zhijiang,China,6,3,3,0.279763,0.0,0.00102745,,,0.0,0.003535,0.0
+8082,AEB,Baise Youjiang Airport,Baise,China,6,3,3,0.286854,0.000102,0.00102864,,,0.0,0.003535,4e-06
+6410,HEK,Heihe Airport,Heihe,China,6,3,3,0.240802,0.0,0.00141758,,,0.0,0.003535,0.0
+6752,TCG,Tacheng Airport,Tacheng,China,4,2,2,0.239412,0.0,0.00102446,,,0.0,0.002356,0.0
+9311,GXH,Gannan Xiahe Airport,Xiahe city,China,4,2,2,0.266583,0.00037,0.00098773,,,0.0,0.002356,9e-06
+9848,LDS,Lindu Airport,Yinchun,China,4,2,2,0.249989,5.2e-05,0.00095556,,,0.0,0.002356,1e-06
+6946,AAT,Altay Air Base,Altay,China,4,2,2,0.239412,0.0,0.00102446,,,0.0,0.002356,0.0
+7457,FUO,Foshan Shadi Airport,Foshan,China,4,2,2,0.229695,0.0,0.00103164,,,0.0,0.002356,0.0
+9386,NLT,Xinyuan Nalati Airport,Xinyuan,China,4,2,2,0.239412,0.0,0.00102446,,,0.0,0.002356,0.0
+10940,ZQZ,Zhangjiakou Ningyuan Airport,Zhangjiakou,China,4,2,2,0.237132,0.0,0.00095389,,,0.0,0.002356,0.0
+6363,GOQ,Golmud Airport,Golmud,China,4,2,2,0.266014,0.000238,0.00096977,,,0.0,0.002356,6e-06
+6406,KCA,Kuqa Airport,Kuqa,China,4,2,2,0.239412,0.0,0.00102446,,,0.0,0.002356,0.0
+6408,KRY,Karamay Airport,Karamay,China,4,2,2,0.239412,0.0,0.00102446,,,0.0,0.002356,0.0
+7505,BSD,Baoshan Yunduan Airport,Baoshan,China,4,2,2,0.256161,0.0,0.00095497,,,0.0,0.002356,0.0
+7527,LNJ,Lintsang Airfield,Lincang,China,4,2,2,0.256161,0.0,0.00095497,,,0.0,0.002356,0.0
+8043,ZHY,Zhongwei Shapotou Airport,Zhongwei,China,4,2,2,0.287516,0.000369,0.00098013,,,0.0,0.002356,9e-06
+10160,ERL,Erenhot Saiwusu International Airport,Erenhot,China,4,2,2,0.289522,0.000169,0.00097109,,,0.0,0.002356,4e-06
+7894,YUS,Yushu Batang Airport,Yushu,China,4,2,2,0.22885,0.0,0.00099855,,,0.0,0.002356,0.0
+7932,NGQ,Ngari Gunsa Airport,Shiquanhe,China,4,2,2,0.225126,0.000145,0.00107363,,,0.0,0.002356,4e-06
+10941,YIE,Arxan Yi'ershi Airport,Arxan,China,2,1,1,0.238953,0.0,0.00087114,,,0.0,0.001178,0.0
+2262,TTT,Taitung Airport,Fengnin,Taiwan,2,1,1,0.217648,0.0,0.00089779,,,0.0,0.001178,0.0
+2270,TNN,Tainan Airport,Tainan,Taiwan,2,1,1,0.243153,0.0,0.00085021,,,0.0,0.001178,0.0
+7504,LCX,Longyan Guanzhishan Airport,Longyan,China,2,1,1,0.255112,0.0,0.00085478,,,0.0,0.001178,0.0
+8921,KGT,Kangding Airport,Kangding,China,2,1,1,0.271822,0.0,0.0008584,,,0.0,0.001178,0.0
+11498,BPL,Alashankou Bole (Bortala) airport,Bole,China,2,1,1,0.239412,0.0,0.00089314,,,0.0,0.001178,0.0
+3078,,Shek Kong Air Base,Sek Kong,Hong Kong,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+14090,YUA,Yuanmou Air Base,Yuanmou,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+8233,KJI,Kanas Airport,Burqin,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+9770,YZY,Zhangye Ganzhou Airport,Zhangye,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+12050,HTT,Huatugou Airport,Mengnai,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+10800,FYJ,Dongji Aiport,Fuyuan,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+14092,XEN,Xingcheng Air Base,,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+12057,,Shenyang Dongta Airport,Shenyang,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+12053,RUG,Rugao Air Base,Rugao,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+8971,GYU,Guyuan Liupanshan Airport,Guyuan,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+9308,LLV,Lüliang Airport,Lvliang,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+6964,JGS,Jinggangshan Airport,Jian,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+8974,CNI,Changhai Airport,Changhai,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+12052,BFU,Bengbu Airport,Bengbu,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+9854,TNH,Tonghua Sanyuanpu Airport,Tonghua,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+10363,HCJ,Hechi Jinchengjiang Airport,Hechi,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+12921,AXF,Alxa Left Banner Bayanhot Airport,Alxa Left Banner,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+9857,SZV,Suzhou Guangfu Airport,Suzhou,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+11920,,Gangshan Air Force Base,Gangshan,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+12054,WHU,Wuhu Air Base,Wuhu,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+7458,HUZ,Huizhou Airport,Huizhou,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13470,DBC,Baicheng Chang'an Airport,Baicheng,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13471,LNL,Longnan Chengzhou Airport,Longnan,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13472,SQD,Shangrao Sanqingshan Airport,Shangrao,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13473,YSQ,Songyuan Chaganhu Airport,Songyuan,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13474,JSJ,Jiansanjiang Airport,Jiansanjiang,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13476,WMT,Zunyi Maotai Airport,Zunyi,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13477,LLB,Libo Airport,Libo,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13478,CDE,Chengde Puning Airport,Chengde,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13479,DTU,Wudalianchi Dedu Airport,Wudalianchi,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+12055,SXJ,Shanshan Airport,Shanshan,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13480,EJN,Ejin Banner-Taolai Airport,Ejin Banner,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13481,RHT,Alxa Right Banner Badanjilin Airport,Alxa Right Banner,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13482,HUO,Holingol Huolinhe Airport,Holingol,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13483,GMQ,Golog Maqin Airport,Golog,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13485,QSZ,Yeerqiang Airport,Yarkant,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13488,CWJ,Cangyuan Washan Airport,Cangyuan,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13489,JMJ,Lancang Jingmai Airport,Lancang Lahu,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13490,NLH,Ninglang Luguhu Airport,Ninglang,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13494,WUT,Xinzhou Wutaishan Airport,Xinzhou,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13496,NZL,Chengjisihan Airport,Zhalantun,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+8889,THQ,Tianshui Maijishan Airport,Tianshui,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+10937,LPF,Liupanshui Yuezhao Airport,Liupanshui,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+10938,KJH,Kaili Airport,Kaili,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+10939,HPG,Shennongjia Hongping Airport,Shennongjia,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+10942,HNY,Hengyang Nanyue Airport,Hengyang,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+10943,AHJ,Hongyuan Airport,Ngawa,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+12056,YKH,Yingkou Lanqi Airport,Yingkou,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+14091,,Changsha Datuopu Airport/AFB,Changsha,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+12047,LHK,Guangzhou MR Air Base,Guanghua,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+2260,,Pingtung South Airport,Pingtung,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+2261,,Longtan Air Base,Longtang,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+2263,GNI,Lyudao Airport,Green Island,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+2265,CYI,Chiayi Airport,Chiayi,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+2267,KYD,Lanyu Airport,Lanyu,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+2271,HSZ,Hsinchu Air Base,Hsinchu,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+2273,,Chihhang Air Base,Taitung,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+2274,PIF,Pingtung North Airport,Pingtung,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+2277,WOT,Wang-an Airport,Wang An,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+6389,WEH,Weihai Airport,Weihai,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+6362,AKA,Ankang Wulipu Airport,Ankang,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+6364,HZG,Hanzhong Chenggu Airport,Hanzhong,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+11545,LFQ,Linfen Qiaoli Airport,LINFEN,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+6431,,Lanzhou City Airport,Lanzhou,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+4390,HHP,Shun Tak Heliport,Hong Kong,Hong Kong,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+5991,LZN,Matsu Nangan Airport,Matsu Islands,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+5992,HCN,Hengchun Airport,Hengchun,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+5993,MFK,Matsu Beigan Airport,Matsu Islands,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+8926,TLQ,Turpan Jiaohe Airport,Turpan,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+8055,TXG,Taichung Airport,Taichung,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13192,HXD,Delingha Airport,Haixi,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13193,BAR,Qionghai Bo'ao Airport,Qionghai,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+7052,SIA,Xi'an Xiguan Airport,Xi\'AN,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+7564,CMJ,Chi Mei Airport,Cimei,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13211,UCB,Ulanqab Jining Airport,Wulanchabu,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13726,,Beijing Xijiao Airport,Beijing,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13229,WGN,Shaoyang Wugang Airport,Shaoyang,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+8627,,Taoyuan Air Base,Taoyuan,Taiwan,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+11713,RIZ,Rizhao Shanzihe Airport,Rizhao,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+11714,SQJ,Shaxian Airport,Sanming,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+13257,,Renk Airport,Huangshan,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+6405,IQM,Qiemo Yudu Airport,Qiemo,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+8442,RKZ,Shigatse Air Base,Shigatse,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+12048,WDS,Shiyan Wudangshan Airport,Shiyan,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0
+11499,FYN,Fuyun Koktokay Airport,Fuyun,China,0,0,0,0.0,0.0,0.00076181,,,0.0,0.0,0.0

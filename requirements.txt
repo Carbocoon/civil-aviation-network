@@ -1,6 +1,16 @@
-# 核心算法引擎依赖
+# 依赖清单：算法引擎 + Streamlit 看板
+# 云端部署（Streamlit Community Cloud 等）默认读仓库根的本文件，
+# 内容与 visualization/web_frontend/requirements.txt 保持一致。
+
+# 核心算法引擎
 networkx>=3.0
 openpyxl>=3.0
+
+# 可视化看板
+streamlit>=1.36
+pandas>=2.0
+numpy>=1.24
+altair>=5.0
 
 # 生产模式（Hive 数据源）：仅在 CIVIL_AVIATION_SOURCE=hive 时需要
 # 在集群客户端安装：pip install pyhive thrift

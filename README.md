@@ -23,18 +23,21 @@ civil-aviation-network/         ← Git 仓库根
 ├── visualization/              # 成员C：web_frontend（Streamlit 看板，主交付）
 ├── tests/                      # 组长算法单测 23 项 + 成员D 集成测试 7 项
 ├── docs/                       # 技术文档（algorithm_api.md：算法接口契约）
-├── data/raw/                   # 数据说明与吞吐/容量字典（真实 .dat 不入库）
-├── requirements.txt            # 算法依赖
+├── data/raw/                   # 原始数据（随仓库提交）
+├── data/processed/             # 算法结果与 hive_load 回灌脚本（随仓库提交）
+├── requirements.txt            # 算法 + 看板依赖（云端部署读本文件）
 └── .gitignore
 ```
 
 ## 数据放在哪里（重要）
-真实数据**不入库**，由组长以数据包形式单独提供，位于**项目根 `data/raw/`**（在仓库根之外）。
+原始数据与算法结果**随仓库一同提交**，clone 之后不用另取数据包，看板、算法引擎和 30 项测试都能直接跑。
 
-- `algorithm/config.py` 会从 `algorithm/` 开始**逐级向上查找**含 `data/raw/airports.dat` 的目录作为项目根，因此仓库放在 `16.项目源码/` 下或更深一层都能自动找到数据，无需改代码。
-- 若把仓库 clone 到别处，可设置环境变量 `CIVIL_AVIATION_PROJECT_ROOT` 指向项目根目录；找不到必需数据文件时引擎会直接列出缺失路径与解决办法。
-- 数据包内容：`airports.dat`、`routes.dat`、`airlines.dat`、`airport_throughput_2023.csv`、`airport_capacity_2023.csv`。
-- 算法输出写入项目根 `data/processed/`（预警结果即使为空也保留表头，便于看板读取）。
+- 仓库内自带两份数据：`data/raw/`（OpenFlights 机场与航段、2023 年真实吞吐量与设计容量字典）、`data/processed/`（算法结果文件，以及 `hive_load/` 下的结果表 CSV 与回灌 HQL）。项目根 `data/` 另有一份内容一致的交付副本。
+- `algorithm/config.py` 会从 `algorithm/` 开始**逐级向上查找**含 `data/raw/airports.dat` 的目录作为项目根；看板 `data_loader.py` 按含 `data/processed` 的目录定位结果文件。仓库放在 `16.项目源码/` 下或更深一层都能自动找到，无需改代码。
+- 在 Streamlit Community Cloud 等平台部署时，入口填 `visualization/web_frontend/app.py`，依赖读仓库根 `requirements.txt`，数据已在仓库内，无需额外挂载或设置环境变量；部署完成后 Reboot 一次即可。
+- 若把仓库 clone 到别处、或要改用另一份数据，可设置环境变量 `CIVIL_AVIATION_PROJECT_ROOT` 指向含 `data/` 的目录；找不到必需数据文件时引擎会列出已检查路径与解决办法。
+- 原始数据文件：`airports.dat`、`routes.dat`、`airport_throughput_2023.csv`、`airport_capacity_2023.csv`（ETL 的 `RAW_REQUIRED` 即这 4 个；`airlines.dat` 为辅助表，算法与 ETL 均未依赖，未随仓库提供）。
+- 算法输出写入 `data/processed/`（预警结果即使为空也保留表头，便于看板读取）；`subscriptions.csv` 是看板运行期生成的订阅登记，不入库，重新部署会重置。
 
 ## 快速开始
 ```bash
